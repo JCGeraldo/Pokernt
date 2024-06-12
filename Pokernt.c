@@ -8,24 +8,23 @@
 #include "tdas/stack.h"
 #include "tdas/queue.h"
 
-
+typedef struct{
+  char numero;
+  char palo;
+  int puntaje;
+}Carta;
 
 
 
 // ==================== OPCIÓN 1 ====================
 
-void dfs(State *estado) {
-}
 
 // ==================== OPCIÓN 2 ====================
 
-void bfs(State *estado) {
-}
+
 
 // ==================== OPCIÓN 3 ====================
 
-void best_first(State* estado) {
-}
 
 // ==================== MAIN ====================
 
@@ -48,13 +47,13 @@ int main() {
         
         switch (opcion) {
         case '1':
-          dfs(opcion);
+          //dfs(opcion);
           break;
         case '2':
-          bfs(opcion);
+          //bfs(opcion);
           break;
         case '3':
-          best_first(opcion);
+          //best_first(opcion);
           break;
         case '4':
            printf("\nSaliendo del programa.\n");
