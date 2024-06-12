@@ -34,12 +34,17 @@ int main() {
     char opcion;
     do {
         puts("\n========================================");
-        puts("     Escoge método de búsqueda");
+        puts("               Pokern't  ♥♠♣♦");
         puts("========================================");
-        
-        puts("1) Búsqueda en Profundidad");
-        puts("2) Buscar en Anchura");
-        puts("3) Buscar Mejor Primero");
+        printf("          ───▄█▄▄▄▄▄▄▄───▄──\n");
+        printf("          ──█▀██▀▄▄▀███▄▐─▌─\n");
+        printf("          ─████▌█▌▐█▐███▄▀▄─\n");
+        printf("          ──████▄▀▀▄████────\n");
+        printf("          ───▀█▀▀▀▀▀▀█▀─────\n\n");
+      
+        puts("1) Jugar");
+        puts("2) Tutorial");
+        puts("3) Configuración");
         puts("4) Salir");
     
         printf("Ingrese su opción: ");
@@ -47,16 +52,13 @@ int main() {
         
         switch (opcion) {
         case '1':
-          //dfs(opcion);
           break;
         case '2':
-          //bfs(opcion);
           break;
         case '3':
-          //best_first(opcion);
           break;
         case '4':
-           printf("\nSaliendo del programa.\n");
+           printf("\nSaliendo del juego.\n");
            break;
         default:
             printf("\nOpción inválida. Por favor, ingrese una opción válida.\n");
