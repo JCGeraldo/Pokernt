@@ -9,33 +9,39 @@
 #include "tdas/stack.h"
 #include "tdas/queue.h"
 
-typedef struct{
+typedef struct {
   char numero; // 1 a 13
   int palo;  // 0-3 (0 es Corazones, 1 es Diamantes, 2 es Tréboles, 3 es Picas)
   int puntaje;
-}Carta;
+} Carta;
+
+typedef struct {
+  Carta cartas[5]; // Cartas que tiene el jugador
+  int puntaje; // Puntaje del jugador
+  // Falta definir el comodín seleccionado
+} Mano;
 
 void inicializarMazo(Carta *mazo) {
-    int index = 0;
-    for (int palo = 0; palo < 3; palo++) {
-        for (int valor = 1; valor <= 13; valor++) {
-            mazo[index].numero = valor;
-            mazo[index].palo = palo;
-            index++;
-        }
+  int index = 0;
+  for (int palo = 0 ; palo <= 3 ; palo++) {
+    for (int valor = 1 ; valor <= 13 ; valor++) {
+      mazo[index].numero = valor;
+      mazo[index].palo = palo;
+      index++;
     }
+  }
 }
 
-void barajarMazo(Carta *mazo, int tamano,Stack *mazoBarajado) {
+void barajarMazo(Carta *mazo, int tamano, Stack *mazoBarajado) {
   srand(time(NULL));
-  for (int i = 0; i < tamano; i++) {
-      int j = rand() % tamano;
-      Carta temp = mazo[i];
-      mazo[i] = mazo[j];
-      mazo[j] = temp;
+  for (int i = 0 ; i < tamano ; i++) {
+    int j = rand() % tamano;
+    Carta temp = mazo[i];
+    mazo[i] = mazo[j];
+    mazo[j] = temp;
   }
-  for (int i = 0; i < tamano; i++)
-    stack_push(mazoBarajado,mazo+i);
+  for (int i = 0 ; i < tamano ; i++)
+    stack_push(mazoBarajado, mazo+i);
 }
 
 
@@ -43,6 +49,20 @@ void barajarMazo(Carta *mazo, int tamano,Stack *mazoBarajado) {
 
 // ==================== OPCIÓN 1 ====================
 
+void jugar() {
+  // Inicializar el mazo
+  Carta mazo[52];
+  inicializarMazo(mazo);
+  // Barajar el mazo
+  Stack *mazoBarajado = stack_create(mazoBarajado); 
+  barajarMazo(mazo, 52, mazoBarajado);
+
+  for (int i = 0 ; i < 52 ; i++) {
+    printf("%d %d\n", mazo[i].numero, mazo[i].palo);
+    
+  }
+  
+}
 
 // ==================== OPCIÓN 2 ====================
 
@@ -76,6 +96,7 @@ int main() {
         
         switch (opcion) {
         case '1':
+          jugar();
           break;
         case '2':
           break;
