@@ -47,7 +47,6 @@ void barajarMazo(Carta *mazo, int tamano,Stack *mazoBarajado) {
 // ==================== OPCIÓN 2 ====================
 
 
-
 // ==================== OPCIÓN 3 ====================
 
 
