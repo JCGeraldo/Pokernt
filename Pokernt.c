@@ -8,6 +8,7 @@
 #include "tdas/heap.h"
 #include "tdas/stack.h"
 #include "tdas/queue.h"
+#include "tdas/extra.h"
 
 typedef struct {
   char numero; // 1 a 13
@@ -16,10 +17,17 @@ typedef struct {
 } Carta;
 
 typedef struct {
-  Carta cartas[5]; // Cartas que tiene el jugador
-  int puntaje; // Puntaje del jugador
+  Carta cartas[8]; // Cartas que tiene el jugador
+  int puntaje;
+  int comodin;
+  // Puntaje del jugador
   // Falta definir el comodín seleccionado
-} Mano;
+} Jugador;
+
+typedef struct{
+  int etapa;
+  int pozo;
+}Nivel;
 
 void inicializarMazo(Carta *mazo) {
   int index = 0;
@@ -46,21 +54,39 @@ void barajarMazo(Carta *mazo, int tamano, Stack *mazoBarajado) {
 
 
 
-
+void repartirMano(Jugador jugador, Stack* mazoBarajado){
+  return;
+}
+void  mostrarMano(Jugador jugador){
+  return;
+}
 // ==================== OPCIÓN 1 ====================
 
 void jugar() {
+  limpiarPantalla();
   // Inicializar el mazo
   Carta mazo[52];
+  Carta cartasElegidas[5];
+  Nivel nivel;
+  nivel.etapa = 1;
+  nivel.pozo = 100;
+  
   inicializarMazo(mazo);
   // Barajar el mazo
   Stack *mazoBarajado = stack_create(mazoBarajado); 
   barajarMazo(mazo, 52, mazoBarajado);
-
-  for (int i = 0 ; i < 52 ; i++) {
-    printf("%d %d\n", mazo[i].numero, mazo[i].palo);
-    
-  }
+  Jugador jugador;
+  jugador.puntaje = 0;
+  repartirMano(jugador, mazoBarajado);
+  mostrarMano(jugador);
+  // Pedir cartas al jugador
+  int carta;
+  printf("Ingrese el número de la carta que desea pedir (1-5): ");
+  do{
+    scanf("%d", &carta);
+  }while(carta!=0);
+  
+  
   
 }
 
@@ -74,18 +100,19 @@ void jugar() {
 
 int main() {
 
-    
+    puts("\n========================================");
+    puts("               Pokern't  ♥♠♣♦");
+    puts("========================================");
+    printf("          ───▄█▄▄▄▄▄▄▄───▄──\n");
+    printf("          ──█▀██▀▄▄▀███▄▐─▌─\n");
+    printf("          ─████▌█▌▐█▐███▄▀▄─\n");
+    printf("          ──████▄▀▀▄████────\n");
+    printf("          ───▀█▀▀▀▀▀▀█▀─────\n\n");
+    puts("\nPresione una tecla para jugar...");
+    getchar();
+    limpiarPantalla();// Consume el '\n' del buffer de entrada
     char opcion;
     do {
-        puts("\n========================================");
-        puts("               Pokern't  ♥♠♣♦");
-        puts("========================================");
-        printf("          ───▄█▄▄▄▄▄▄▄───▄──\n");
-        printf("          ──█▀██▀▄▄▀███▄▐─▌─\n");
-        printf("          ─████▌█▌▐█▐███▄▀▄─\n");
-        printf("          ──████▄▀▀▄████────\n");
-        printf("          ───▀█▀▀▀▀▀▀█▀─────\n\n");
-      
         puts("1) Jugar");
         puts("2) Tutorial");
         puts("3) Configuración");
