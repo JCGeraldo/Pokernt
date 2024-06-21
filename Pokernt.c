@@ -54,12 +54,18 @@ void barajarMazo(Carta *mazo, int tamano, Stack *mazoBarajado) {
 
 
 
-void repartirMano(Jugador jugador, Stack* mazoBarajado){
-  return;
+void repartirMano(Jugador* jugador, Stack* mazoBarajado){
+  for(int i = 0; i < 8; i++)
+    jugador->cartas[i] = *(Carta*)stack_pop(mazoBarajado);
 }
+
 void  mostrarMano(Jugador jugador){
-  return;
+  for(int i = 0; i < 8; i++)
+    printf("|%d %d|  ", jugador.cartas[i].numero, jugador.cartas[i].palo);
+  printf("\n\n");
 }
+
+
 // ==================== OPCIÓN 1 ====================
 
 void jugar() {
@@ -77,7 +83,7 @@ void jugar() {
   barajarMazo(mazo, 52, mazoBarajado);
   Jugador jugador;
   jugador.puntaje = 0;
-  repartirMano(jugador, mazoBarajado);
+  repartirMano(&jugador, mazoBarajado);
   mostrarMano(jugador);
   // Pedir cartas al jugador
   int carta;
