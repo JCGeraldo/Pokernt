@@ -55,7 +55,12 @@ void barajarMazo(Carta *mazo, int tamano, Stack *mazoBarajado) {
 }
 
 // ----------------------------------------------------------------
-
+bool noExiste(int carta,int *cartasElegidas){
+  for(int i =0; i <5; i++){
+    if(cartasElegidas[i] == carta) return false;
+  }
+  return true;
+}
 void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
   for(int i = 0; i < 8; i++)
     jugador->cartas[i] = *(Carta*)stack_pop(mazoBarajado);
@@ -78,7 +83,7 @@ bool jugar() {
   // Inicializar variables y el mazo
   bool derrota = true;
   Carta mazo[52];
-  int cartasElegidas[5] = {0};
+  int cartasElegidas[5] = {0,0,0,0,0};
   
   Nivel nivel;  
   nivel.etapa = 1;
@@ -104,20 +109,25 @@ bool jugar() {
     do{
       scanf("%d", &carta);
       if(!carta) break;
-      cartasElegidas[cont] = carta - 1;
-      cont++;
+      if(noExiste(carta,cartasElegidas)) {
+        cartasElegidas[cont] = carta;
+        cont++;
+      }
+      else printf("La carta ya fue elegida, ingrese otra: ");
     } while(cont < 5);
     manosJugadas++;
   
     //Mostrar cartas elegidas y pedir confirmacion(opcional)
     printf("Cartas elegidas: \n");
     for(int i = 0; i < cont; i++){
-      if(jugador.cartas[cartasElegidas[i]].numero != 0)
-        printf("|%d %d|  ", jugador.cartas[cartasElegidas[i]].numero, jugador.cartas[cartasElegidas[i]].palo);
+      if(jugador.cartas[cartasElegidas[i] - 1].numero == 0) break;
+      printf("|%d %d|  ", jugador.cartas[cartasElegidas[i] - 1].numero, jugador.cartas[cartasElegidas[i] - 1].palo);
     }
     printf("\n");
 
-    asignacionPuntaje(&jugador, cartasElegidas); // IAN 
+    presioneTeclaParaContinuar();
+
+    //asignacionPuntaje(&jugador, cartasElegidas); // IAN 
     
     //asignar puntaje a la mano jugada, mostrar puntaje total
 
@@ -125,7 +135,7 @@ bool jugar() {
 
     //quitar de la mano las cartas elegidas, vaciar la lista de cartas elegidas y rellenar la mano con cartas del mazo.
     for(int i = 0 ; i < 5 ; i++) { // Aqui se reemplazan las cartas de la mano con otras del mazo
-      jugador.cartas[cartasElegidas[i]] = *(Carta*)stack_pop(mazoBarajado);
+      jugador.cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
       cartasElegidas[i] = 0;
     }
     
