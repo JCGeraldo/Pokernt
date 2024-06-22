@@ -75,6 +75,190 @@ void  mostrarMano(Jugador jugador) {
   printf("\n\n");
 }
 
+// ----------------------------------------------------------------
+
+int compararCartas(const void *a, const void *b) {
+  Carta *cartaA = (Carta *)a;
+  Carta *cartaB = (Carta *)b;
+
+  if (cartaA->numero != cartaB->numero)
+      return cartaA->numero - cartaB->numero;
+  return cartaA->palo - cartaB->palo;
+}
+
+// ----------------------------------------------------------------
+
+void ordenarCartas(Carta *cartas, int largo) {
+  qsort(cartas, largo, sizeof(Carta), compararCartas);
+}
+
+// ----------------------------------------------------------------
+
+bool mismaPinta(Carta* cartas, int largo) {
+  int pinta = cartas[0].palo;
+  for(int i = 1 ; i < largo ; i++) {
+    if(cartas[i].palo != pinta) return false;
+  }
+  return true;
+}
+// ----------------------------------------------------------------
+
+int valorCarta(Carta carta) {
+  // Falta el caso del comodín
+  int puntaje;
+  switch (carta.numero) {
+    case 1: // As
+      puntaje = 15;
+        break;
+    case 11: // Jota
+    case 12: // Reina
+    case 13: // Rey
+      puntaje = 10;
+        break;
+    default:
+      puntaje = carta.numero; // Los valores 2-10 se asignan directamente
+        break;
+  }
+  return puntaje;
+}
+
+// ----------------------------------------------------------------
+
+bool esPoker(Carta* cartas, int largo, int* suma);
+
+/*
+// Prototipo de funciones
+bool esEscaleraDeColor(Carta* cartas, int largo, int* suma);
+bool esPoker(Carta* cartas, int largo, int* suma);
+bool esFull(Carta* cartas, int largo, int* suma);
+bool esColor(Carta* cartas, int largo, int* suma);
+bool esEscalera(Carta* cartas, int largo, int* suma);
+bool esTrio(Carta* cartas, int largo, int* suma);
+bool esDoblePareja(Carta* cartas, int largo, int* suma);
+bool esPareja(Carta* cartas, int largo, int* suma);
+void cartaMasAlta(Carta* cartas, int largo, int* suma);
+*/
+// ----------------------------------------------------------------
+
+void mejorJugada(Carta* cartas, int largo, int* puntaje) {
+  int multiplo, suma = 0; // Suma de los valores de las cartas
+  if (esPoker(cartas, largo, &suma)) {
+    *puntaje = 60;
+    multiplo = 7;
+  }
+  /*
+  if (esEscaleraDeColor(cartas, largo, &suma)) {
+    *puntaje = 100;
+    multiplo = 8;
+  } else if (esPoker(cartas, largo, &suma)) {
+    *puntaje = 60;
+    multiplo = 7;
+  } else if (esFull(cartas, largo, &suma)) {
+    *puntaje = 40;
+    multiplo = 4;
+  } else if (esColor(cartas, largo, &suma)) {
+    *puntaje = 35;
+    multiplo = 4;
+  } else if (esEscalera(cartas, largo, &suma)) {
+    *puntaje = 30;
+    multiplo = 4;
+  } else if (esTrio(cartas, largo, &suma)) {
+    *puntaje = 30;
+    multiplo = 3;
+  } else if (esDoblePareja(cartas, largo, &suma)) {
+    *puntaje = 20;
+    multiplo = 2;
+  } else if (esPareja(cartas, largo, &suma)) {
+    *puntaje = 10;
+    multiplo = 2;
+  } else { 
+    cartaMasAlta(cartas, largo, &suma);
+    *puntaje = 5;
+    multiplo = 1;
+  }
+  */
+  *puntaje += suma;
+  *puntaje *= multiplo;
+  return;
+}
+
+// ----------------------------------------------------------------
+
+/*
+bool esEscaleraDeColor(Carta* cartas, int largo, int* suma) {
+  if (largo < 5) return false;
+  int aux = 0;
+  if (esColor(cartas, largo, &aux) && esEscalera(cartas, largo, &aux)) {
+    for (int i = 0 ; i < largo ; i++) {
+      *suma += valorCarta(cartas[i]);
+    }
+    return true;
+  }
+  return false;
+}
+*/
+
+bool esPoker(Carta* cartas, int largo, int* suma) {
+  if (largo < 4) return false;
+  for (int i = 0 ; i < largo - 3 ; i++) {
+    if (cartas[i].numero == cartas[i+1].numero && 
+        cartas[i].numero == cartas[i+2].numero && 
+        cartas[i].numero == cartas[i+3].numero) {
+      for (int j = i ; j < i + 4 ; j++) {
+        *suma += valorCarta(cartas[j]);
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+/*
+bool esFull(Carta* cartas, int largo, int* suma) {
+  if (largo < 5) return false;
+  bool trio = false, pareja = false;
+
+  for (int i = 0 ; i < largo - 2 ; i++) {
+    if (cartas[i].numero == cartas[i+1].numero && cartas[i].numero == cartas[i+2].numero) {
+      trio = true;
+      *suma += valorCarta(cartas[i]) * 3;
+      i += 2;
+    } else if (cartas[i].numero == cartas[i+1].numero) {
+      pareja = true;
+      *suma += valorCarta(cartas[i]) * 2;
+      i += 1;
+    }
+  }
+}
+*/
+
+// ----------------------------------------------------------------
+
+void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
+  if (largo == 0) return;
+
+  // Crear un arreglo de cartas seleccionadas
+  Carta* cartasSeleccionadas = (Carta*)malloc(largo * sizeof(Carta));
+  if (cartasSeleccionadas == NULL) {
+      printf("Error al asignar memoria para cartas seleccionadas.\n");
+      return;
+  }
+
+  // Copiar las cartas seleccionadas al nuevo arreglo
+  for (int i = 0 ; i < largo ; i++) {
+      int posicion = listaPosicion[i];
+      cartasSeleccionadas[i] = jugador->cartas[posicion];
+  }
+
+  ordenarCartas(cartasSeleccionadas, largo);
+
+  // Calcular el puntaje basado en las cartas seleccionadas
+  int puntaje = 0;
+  mejorJugada(cartasSeleccionadas, largo, &puntaje); 
+  jugador->puntaje += puntaje; // Agregar el puntaje calculado al puntaje total del jugador
+  free(cartasSeleccionadas);  
+
+}
 
 // ==================== OPCIÓN 1 ====================
 
@@ -127,7 +311,7 @@ bool jugar() {
 
     presioneTeclaParaContinuar();
 
-    //asignacionPuntaje(&jugador, cartasElegidas); // IAN 
+    asignacionPuntaje(&jugador, cartasElegidas, cont); // IAN 
     
     //asignar puntaje a la mano jugada, mostrar puntaje total
 
