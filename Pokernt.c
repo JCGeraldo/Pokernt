@@ -88,7 +88,8 @@ int compararCartas(const void *a, const void *b) {
 
 // ----------------------------------------------------------------
 
-void ordenarCartas(Carta *cartas, int largo) {
+void ordenarCartas(Carta* cartas, int largo) {
+  if (largo < 2) return;
   qsort(cartas, largo, sizeof(Carta), compararCartas);
 }
 
@@ -119,118 +120,90 @@ int valorCarta(Carta carta) {
       puntaje = carta.numero; // Los valores 2-10 se asignan directamente
         break;
   }
+  printf("%d ", puntaje);
   return puntaje;
 }
 
 // ----------------------------------------------------------------
 
-bool esPoker(Carta* cartas, int largo, int* suma);
+bool esPoker(Carta* cartas, int largo);
 
 /*
 // Prototipo de funciones
-bool esEscaleraDeColor(Carta* cartas, int largo, int* suma);
-bool esPoker(Carta* cartas, int largo, int* suma);
-bool esFull(Carta* cartas, int largo, int* suma);
-bool esColor(Carta* cartas, int largo, int* suma);
-bool esEscalera(Carta* cartas, int largo, int* suma);
-bool esTrio(Carta* cartas, int largo, int* suma);
-bool esDoblePareja(Carta* cartas, int largo, int* suma);
-bool esPareja(Carta* cartas, int largo, int* suma);
-void cartaMasAlta(Carta* cartas, int largo, int* suma);
+bool esEscaleraDeColor(Carta* cartas, int largo);
+bool esPoker(Carta* cartas, int largo);
+bool esFull(Carta* cartas, int largo);
+bool esColor(Carta* cartas, int largo);
+bool esEscalera(Carta* cartas, int largo);
+bool esTrio(Carta* cartas, int largo);
+bool esDoblePareja(Carta* cartas, int largo);
+bool esPareja(Carta* cartas, int largo);
+void cartaMasAlta(Carta* cartas, int largo);
 */
 // ----------------------------------------------------------------
 
 void mejorJugada(Carta* cartas, int largo, int* puntaje) {
-  int multiplo, suma = 0; // Suma de los valores de las cartas
-  if (esPoker(cartas, largo, &suma)) {
+  int multiplo = 1;
+  if (esPoker(cartas, largo)) {
+    printf("Poker\n");
     *puntaje = 60;
     multiplo = 7;
   }
+  printf("No es Poker\n");
   /*
-  if (esEscaleraDeColor(cartas, largo, &suma)) {
+  if (esEscaleraDeColor(cartas, largo) {
     *puntaje = 100;
     multiplo = 8;
-  } else if (esPoker(cartas, largo, &suma)) {
+  } else if (esPoker(cartas, largo)) {
     *puntaje = 60;
     multiplo = 7;
-  } else if (esFull(cartas, largo, &suma)) {
+  } else if (esFull(cartas, largo)) {
     *puntaje = 40;
     multiplo = 4;
-  } else if (esColor(cartas, largo, &suma)) {
+  } else if (esColor(cartas, largo)) {
     *puntaje = 35;
     multiplo = 4;
-  } else if (esEscalera(cartas, largo, &suma)) {
+  } else if (esEscalera(cartas, largo)) {
     *puntaje = 30;
     multiplo = 4;
-  } else if (esTrio(cartas, largo, &suma)) {
+  } else if (esTrio(cartas, largo)) {
     *puntaje = 30;
     multiplo = 3;
-  } else if (esDoblePareja(cartas, largo, &suma)) {
+  } else if (esDoblePareja(cartas, largo)) {
     *puntaje = 20;
     multiplo = 2;
-  } else if (esPareja(cartas, largo, &suma)) {
+  } else if (esPareja(cartas, largo)) {
     *puntaje = 10;
     multiplo = 2;
   } else { 
-    cartaMasAlta(cartas, largo, &suma);
+    cartaMasAlta(cartas, largo);
     *puntaje = 5;
     multiplo = 1;
   }
   */
-  *puntaje += suma;
+  for (int i = 0 ; i < largo ; i++) {
+    *puntaje += valorCarta(cartas[i]);
+  }
+  printf("\n");
+  printf("Puntaje: %d\n", *puntaje);
   *puntaje *= multiplo;
+  printf("Multiplo: %d\n", multiplo);
   return;
 }
 
 // ----------------------------------------------------------------
 
-/*
-bool esEscaleraDeColor(Carta* cartas, int largo, int* suma) {
-  if (largo < 5) return false;
-  int aux = 0;
-  if (esColor(cartas, largo, &aux) && esEscalera(cartas, largo, &aux)) {
-    for (int i = 0 ; i < largo ; i++) {
-      *suma += valorCarta(cartas[i]);
-    }
-    return true;
-  }
-  return false;
-}
-*/
-
-bool esPoker(Carta* cartas, int largo, int* suma) {
+bool esPoker(Carta* cartas, int largo) {
   if (largo < 4) return false;
   for (int i = 0 ; i < largo - 3 ; i++) {
     if (cartas[i].numero == cartas[i+1].numero && 
         cartas[i].numero == cartas[i+2].numero && 
         cartas[i].numero == cartas[i+3].numero) {
-      for (int j = i ; j < i + 4 ; j++) {
-        *suma += valorCarta(cartas[j]);
-      }
       return true;
     }
   }
   return false;
 }
-
-/*
-bool esFull(Carta* cartas, int largo, int* suma) {
-  if (largo < 5) return false;
-  bool trio = false, pareja = false;
-
-  for (int i = 0 ; i < largo - 2 ; i++) {
-    if (cartas[i].numero == cartas[i+1].numero && cartas[i].numero == cartas[i+2].numero) {
-      trio = true;
-      *suma += valorCarta(cartas[i]) * 3;
-      i += 2;
-    } else if (cartas[i].numero == cartas[i+1].numero) {
-      pareja = true;
-      *suma += valorCarta(cartas[i]) * 2;
-      i += 1;
-    }
-  }
-}
-*/
 
 // ----------------------------------------------------------------
 
@@ -240,17 +213,22 @@ void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
   // Crear un arreglo de cartas seleccionadas
   Carta* cartasSeleccionadas = (Carta*)malloc(largo * sizeof(Carta));
   if (cartasSeleccionadas == NULL) {
-      printf("Error al asignar memoria para cartas seleccionadas.\n");
-      return;
+    printf("Error al asignar memoria para cartas seleccionadas.\n");
+    return;
   }
 
   // Copiar las cartas seleccionadas al nuevo arreglo
   for (int i = 0 ; i < largo ; i++) {
-      int posicion = listaPosicion[i];
-      cartasSeleccionadas[i] = jugador->cartas[posicion];
+    int posicion = listaPosicion[i-1];
+    cartasSeleccionadas[i] = jugador->cartas[posicion];
   }
 
+  printf("Cartas seleccionadas en orden:\n");
   ordenarCartas(cartasSeleccionadas, largo);
+  for (int i = 0 ; i < largo ; i++) {
+    printf("|%d %d|  ", cartasSeleccionadas[i].numero, cartasSeleccionadas[i].palo);
+  }
+  printf("\n");
 
   // Calcular el puntaje basado en las cartas seleccionadas
   int puntaje = 0;
@@ -309,7 +287,7 @@ bool jugar() {
     }
     printf("\n");
 
-    presioneTeclaParaContinuar();
+    //presioneTeclaParaContinuar();
 
     asignacionPuntaje(&jugador, cartasElegidas, cont); // IAN 
     
@@ -325,9 +303,9 @@ bool jugar() {
     
         
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
-
-    limpiarPantalla();
-  } while(manosJugadas < 5);
+    printf("\n\n");
+    //limpiarPantalla();
+  } while(manosJugadas < 20);
 
   return derrota;
 }
