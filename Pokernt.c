@@ -126,30 +126,28 @@ int valorCarta(Carta carta) {
 
 // ----------------------------------------------------------------
 
-bool esPoker(Carta* cartas, int largo);
-
-/*
 // Prototipo de funciones
-bool esEscaleraDeColor(Carta* cartas, int largo);
+//bool esEscaleraDeColor(Carta* cartas, int largo);
 bool esPoker(Carta* cartas, int largo);
-bool esFull(Carta* cartas, int largo);
-bool esColor(Carta* cartas, int largo);
-bool esEscalera(Carta* cartas, int largo);
-bool esTrio(Carta* cartas, int largo);
-bool esDoblePareja(Carta* cartas, int largo);
-bool esPareja(Carta* cartas, int largo);
-void cartaMasAlta(Carta* cartas, int largo);
+//bool esFull(Carta* cartas, int largo);
+//bool esColor(Carta* cartas, int largo);
+//bool esEscalera(Carta* cartas, int largo);
+//bool esTrio(Carta* cartas, int largo);
+//bool esDoblePareja(Carta* cartas, int largo);
+//bool esPareja(Carta* cartas, int largo);
+//void cartaMasAlta(Carta* cartas, int largo);
 */
 // ----------------------------------------------------------------
 
 void mejorJugada(Carta* cartas, int largo, int* puntaje) {
   int multiplo = 1;
   if (esPoker(cartas, largo)) {
-    printf("Poker\n");
+    printf("Poker!\n");
     *puntaje = 60;
     multiplo = 7;
+  } else {
+    printf("No es Poker\n");
   }
-  printf("No es Poker\n");
   /*
   if (esEscaleraDeColor(cartas, largo) {
     *puntaje = 100;
@@ -209,6 +207,7 @@ bool esPoker(Carta* cartas, int largo) {
 
 void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
   if (largo == 0) return;
+  printf("Largo: %d\n\n", largo);
 
   // Crear un arreglo de cartas seleccionadas
   Carta* cartasSeleccionadas = (Carta*)malloc(largo * sizeof(Carta));
@@ -219,8 +218,8 @@ void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
 
   // Copiar las cartas seleccionadas al nuevo arreglo
   for (int i = 0 ; i < largo ; i++) {
-    int posicion = listaPosicion[i-1];
-    cartasSeleccionadas[i] = jugador->cartas[posicion];
+    int posicion = listaPosicion[i];
+    cartasSeleccionadas[i] = jugador->cartas[posicion-1];
   }
 
   printf("Cartas seleccionadas en orden:\n");
@@ -253,9 +252,10 @@ bool jugar() {
   int manosJugadas = 0; //Limite de manos, condición de derrota.
   
   inicializarMazo(mazo);
+  
   Stack *mazoBarajado = stack_create(mazoBarajado); // Barajar el mazo
   barajarMazo(mazo, 52, mazoBarajado);
-
+  
   Jugador jugador; 
   jugador.puntaje = 0;
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
@@ -287,7 +287,7 @@ bool jugar() {
     }
     printf("\n");
 
-    //presioneTeclaParaContinuar();
+    presioneTeclaParaContinuar();
 
     asignacionPuntaje(&jugador, cartasElegidas, cont); // IAN 
     
@@ -304,8 +304,8 @@ bool jugar() {
         
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
     printf("\n\n");
-    //limpiarPantalla();
-  } while(manosJugadas < 20);
+    limpiarPantalla();
+  } while(manosJugadas < 5);
 
   return derrota;
 }
