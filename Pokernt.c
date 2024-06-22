@@ -119,6 +119,12 @@ int valorCarta(Carta carta) {
   return puntaje;
 }
 
+int compararNumerico(const void *a, const void *b) {
+  Carta *cartaA = (Carta *)a;
+  Carta *cartaB = (Carta *)b;
+  return cartaA->numero - cartaB->numero;
+}
+
 // ----------------------------------------------------------------
 
 // Prototipo de funciones
@@ -130,7 +136,6 @@ bool esEscalera(Carta* cartas, int largo);
 bool esTrio(Carta* cartas, int largo);
 bool esDoblePareja(Carta* cartas, int largo);
 bool esPareja(Carta* cartas, int largo);
-void cartaMasAlta(Carta* cartas, int largo);
 
 // ----------------------------------------------------------------
 
@@ -169,8 +174,7 @@ void mejorJugada(Carta* cartas, int largo, int* puntaje) {
     printf("Pareja!\n");
     *puntaje = 10;
     multiplo = 2;
-  } else { 
-    cartaMasAlta(cartas, largo);
+  } else {
     printf("Carta más alta!\n");
     *puntaje = 5;
     multiplo = 1;
@@ -190,11 +194,9 @@ void mejorJugada(Carta* cartas, int largo, int* puntaje) {
 
 bool esEscaleraDeColor(Carta* cartas, int largo) {
   if (largo < 5) return false;
-
-  
+  if (esEscalera(cartas, largo) && esColor(cartas, largo)) return true;
   return false;
 }
-
 
 bool esPoker(Carta* cartas, int largo) {
   if (largo < 4) return false;
@@ -211,8 +213,36 @@ bool esPoker(Carta* cartas, int largo) {
 bool esFull(Carta* cartas, int largo) {
   if (largo < 5) return false;
 
+  
 
-  return false;
+  qsort(cartas, largo, sizeof(Carta), compararNumerico);
+
+  bool tieneTrio = false;
+  bool tienePareja = false;
+
+  // Buscar el trío
+  for (int i = 0 ; i < largo - 2 ; i++) {
+    if (cartas[i].numero == cartas[i+1].numero && 
+        cartas[i].numero == cartas[i+2].numero) {
+      tieneTrio = true;
+      // Quitar el trío encontrado y seguir buscando la pareja
+      i += 2; // Saltar las cartas del trío
+      break;
+    }
+  }
+
+  // Buscar la pareja
+  for (int i = 0; i < largo - 1; i++) {
+    if (cartas[i].numero == cartas[i+1].numero) {
+      // Si el trío ya fue encontrado, asegurarse de no contar las mismas cartas como pareja
+      if (tieneTrio && (i > 1 && cartas[i].numero == cartas[i-1].numero && cartas[i].numero == cartas[i-2].numero)) {
+        continue;
+      }
+      tienePareja = true;
+      break;
+    }
+  }
+  return tieneTrio && tienePareja;
 }
 
 bool esColor(Carta* cartas, int largo) {
@@ -228,12 +258,33 @@ bool esColor(Carta* cartas, int largo) {
 
 bool esEscalera(Carta* cartas, int largo) {
   if (largo < 5) return false;
-  for (int i = 0 ; i < largo ; i++) {
-    if (cartas[i].numero + 1 != cartas[i+1].numero) {
-      return false;
-    } 
+  
+  // Ordenar las cartas
+  qsort(cartas, largo, sizeof(Carta), compararNumerico);
+
+  // Contar número de cartas consecutivas
+  int consecutivas = 1;
+  for (int i = 1; i < largo; i++) {
+    if (cartas[i].numero == cartas[i-1].numero) {
+      continue; // Ignorar cartas duplicadas
+    }
+    if (cartas[i].numero == cartas[i-1].numero + 1) {
+      consecutivas++;
+      if (consecutivas == 5) return true;
+    } else {
+      consecutivas = 1; // Resetear la cuenta si no son consecutivas
+    }
   }
-  return true;
+
+  // Considerar caso especial para escalera con As alto (ejemplo: 10, J, Q, K, A)
+  if (cartas[largo-1].numero == 13 && 
+      cartas[largo-2].numero == 12 &&
+      cartas[largo-3].numero == 11 &&
+      cartas[largo-4].numero == 10 &&
+      cartas[0].numero == 1) {
+    return true;
+  }
+  return false;
 }
 
 bool esTrio(Carta* cartas, int largo) {
@@ -248,7 +299,16 @@ bool esTrio(Carta* cartas, int largo) {
 }
 
 bool esDoblePareja(Carta* cartas, int largo) {
-  
+  if (largo < 4) return false;
+  int parejas = 0;
+
+  for (int i = 0 ; i < largo - 1 ; i++) {
+    if (cartas[i].numero == cartas[i+1].numero) {
+      parejas++;
+      i++; // Saltar la siguiente carta para evitar contarla de nuevo
+      if (parejas == 2) return true;
+    }
+  }
   return false;
 }
 
@@ -260,11 +320,6 @@ bool esPareja(Carta* cartas, int largo) {
     }
   }
   return false;
-}
-
-void cartaMasAlta(Carta* cartas, int largo) {
-
-  return;
 }
 
 // ----------------------------------------------------------------
@@ -371,7 +426,7 @@ bool jugar() {
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
     printf("\n\n");
     limpiarPantalla();
-  } while(manosJugadas < 5);
+  } while(manosJugadas < 20);
 
   return derrota;
 }
