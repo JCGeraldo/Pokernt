@@ -28,6 +28,10 @@ typedef struct {
 } Nivel;
 
 // ----------------------------------------------------------------
+void limpiarBuffer(){
+  while(getchar() != '\n');
+}
+// ----------------------------------------------------------------
 
 void inicializarMazo(Carta *mazo) {
   int index = 0;
@@ -327,7 +331,12 @@ bool jugar() {
     //Eleccion de cartas, falta filtrar elecciones repetidas.
     printf("Ingrese el número de la carta que desea pedir (1-8): ");
     do{
-      scanf("%d", &carta);
+      do{
+        limpiarBuffer();
+        if(!scanf("%d", &carta) || carta < 0 || carta > 8 ){
+          puts("Ingrese un número válido: ");
+        }
+      }while(carta < 0 || carta > 8);
       if(!carta) break;
       if(noExiste(carta,cartasElegidas)) {
         cartasElegidas[cont] = carta;
