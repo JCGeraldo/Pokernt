@@ -95,15 +95,6 @@ void ordenarCartas(Carta* cartas, int largo) {
 
 // ----------------------------------------------------------------
 
-bool mismaPinta(Carta* cartas, int largo) {
-  int pinta = cartas[0].palo;
-  for(int i = 1 ; i < largo ; i++) {
-    if(cartas[i].palo != pinta) return false;
-  }
-  return true;
-}
-// ----------------------------------------------------------------
-
 int valorCarta(Carta carta) {
   // Falta el caso del comodín
   int puntaje;
@@ -130,24 +121,46 @@ int valorCarta(Carta carta) {
 //bool esEscaleraDeColor(Carta* cartas, int largo);
 bool esPoker(Carta* cartas, int largo);
 //bool esFull(Carta* cartas, int largo);
-//bool esColor(Carta* cartas, int largo);
+bool esColor(Carta* cartas, int largo);
 //bool esEscalera(Carta* cartas, int largo);
-//bool esTrio(Carta* cartas, int largo);
+bool esTrio(Carta* cartas, int largo);
 //bool esDoblePareja(Carta* cartas, int largo);
-//bool esPareja(Carta* cartas, int largo);
+bool esPareja(Carta* cartas, int largo);
 //void cartaMasAlta(Carta* cartas, int largo);
-*/
+
 // ----------------------------------------------------------------
 
 void mejorJugada(Carta* cartas, int largo, int* puntaje) {
   int multiplo = 1;
+  /*
+  if (esEscaleraDeColor(cartas, largo)) {
+    printf("Escalera de color!\n");
+    *puntaje = 100;
+    multiplo = 8;
+  } else
+*/
   if (esPoker(cartas, largo)) {
     printf("Poker!\n");
     *puntaje = 60;
     multiplo = 7;
-  } else {
-    printf("No es Poker\n");
+  } else if (esColor(cartas, largo)) {
+    printf("Color!\n");
+    *puntaje = 35;
+    multiplo = 4;
+  } else if (esEscalera(cartas, largo)) {
+    printf("Escalera!\n");
+    *puntaje = 30;
+    multiplo = 4;
+  } else if (esTrio(cartas, largo)) {
+    printf("Trio!\n");
+    *puntaje = 30;
+    multiplo = 3;
+  } else if (esPareja(cartas, largo)) {
+    printf("Pareja!\n");
+    *puntaje = 10;
+    multiplo = 2;
   }
+  
   /*
   if (esEscaleraDeColor(cartas, largo) {
     *puntaje = 100;
@@ -190,6 +203,12 @@ void mejorJugada(Carta* cartas, int largo, int* puntaje) {
 }
 
 // ----------------------------------------------------------------
+/*
+bool esEscaleraDeColor(Carta* cartas, int largo) {
+  if (largo < 5) return false;
+  
+}
+*/
 
 bool esPoker(Carta* cartas, int largo) {
   if (largo < 4) return false;
@@ -197,6 +216,54 @@ bool esPoker(Carta* cartas, int largo) {
     if (cartas[i].numero == cartas[i+1].numero && 
         cartas[i].numero == cartas[i+2].numero && 
         cartas[i].numero == cartas[i+3].numero) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+bool esColor(Carta* cartas, int largo) {
+  if (largo < 5) return false;
+  int pinta = cartas[0].palo;
+  for (int i = 1 ; i < largo ; i++) {
+    if (cartas[i].palo != pinta) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/*
+bool esEscalera(Carta* cartas, int largo) {
+  if (largo < 5) return false;
+  for (int i = 0 ; i < largo ; i++) {
+    if (cartas[i].numero + 1 != cartas[i+1].numero) {
+      return false;
+    } 
+  }
+  return true;
+}
+*/
+
+bool esTrio(Carta* cartas, int largo) {
+  if (largo < 3) return false;
+  for (int i = 0 ; i < largo - 2 ; i++) {
+    if (cartas[i].numero == cartas[i+1].numero &&
+        cartas[i].numero == cartas[i+2].numero) {
+      return true;
+    }
+  }
+  return false;
+}
+/*
+bool esDoblePareja(Carta* cartas, int largo) {
+}
+*/
+bool esPareja(Carta* cartas, int largo) {
+  if (largo < 2) return false;
+  for (int i = 0 ; i < largo - 1 ; i++) {
+    if (cartas[i].numero == cartas[i+1].numero) {
       return true;
     }
   }
