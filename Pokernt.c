@@ -267,8 +267,6 @@ void cartaMasAlta(Carta* cartas, int largo) {
 
 void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
   if (largo == 0) return;
-  printf("Largo: %d\n\n", largo);
-
   // Crear un arreglo de cartas seleccionadas
   Carta* cartasSeleccionadas = (Carta*)malloc(largo * sizeof(Carta));
   if (cartasSeleccionadas == NULL) {
@@ -346,10 +344,9 @@ bool jugar() {
       printf("|%d %d|  ", jugador.cartas[cartasElegidas[i] - 1].numero, jugador.cartas[cartasElegidas[i] - 1].palo);
     }
     printf("\n");
-
-    presioneTeclaParaContinuar();
-
+    
     asignacionPuntaje(&jugador, cartasElegidas, cont); // IAN 
+    presioneTeclaParaContinuar();
     
     //asignar puntaje a la mano jugada, mostrar puntaje total
 
