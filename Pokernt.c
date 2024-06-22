@@ -118,31 +118,33 @@ int valorCarta(Carta carta) {
 // ----------------------------------------------------------------
 
 // Prototipo de funciones
-//bool esEscaleraDeColor(Carta* cartas, int largo);
+bool esEscaleraDeColor(Carta* cartas, int largo);
 bool esPoker(Carta* cartas, int largo);
-//bool esFull(Carta* cartas, int largo);
+bool esFull(Carta* cartas, int largo);
 bool esColor(Carta* cartas, int largo);
-//bool esEscalera(Carta* cartas, int largo);
+bool esEscalera(Carta* cartas, int largo);
 bool esTrio(Carta* cartas, int largo);
-//bool esDoblePareja(Carta* cartas, int largo);
+bool esDoblePareja(Carta* cartas, int largo);
 bool esPareja(Carta* cartas, int largo);
-//void cartaMasAlta(Carta* cartas, int largo);
+void cartaMasAlta(Carta* cartas, int largo);
 
 // ----------------------------------------------------------------
 
 void mejorJugada(Carta* cartas, int largo, int* puntaje) {
   int multiplo = 1;
-  /*
+  
   if (esEscaleraDeColor(cartas, largo)) {
     printf("Escalera de color!\n");
     *puntaje = 100;
     multiplo = 8;
-  } else
-*/
-  if (esPoker(cartas, largo)) {
+  } else if (esPoker(cartas, largo)) {
     printf("Poker!\n");
     *puntaje = 60;
     multiplo = 7;
+  } else if (esFull(cartas, largo)) {
+    printf("Full!\n");
+    *puntaje = 40;
+    multiplo = 4;
   } else if (esColor(cartas, largo)) {
     printf("Color!\n");
     *puntaje = 35;
@@ -155,43 +157,21 @@ void mejorJugada(Carta* cartas, int largo, int* puntaje) {
     printf("Trio!\n");
     *puntaje = 30;
     multiplo = 3;
+  } else if (esDoblePareja(cartas, largo)) {
+    printf("Doble pareja!\n");
+    *puntaje = 20;
+    multiplo = 2;
   } else if (esPareja(cartas, largo)) {
     printf("Pareja!\n");
     *puntaje = 10;
     multiplo = 2;
-  }
-  
-  /*
-  if (esEscaleraDeColor(cartas, largo) {
-    *puntaje = 100;
-    multiplo = 8;
-  } else if (esPoker(cartas, largo)) {
-    *puntaje = 60;
-    multiplo = 7;
-  } else if (esFull(cartas, largo)) {
-    *puntaje = 40;
-    multiplo = 4;
-  } else if (esColor(cartas, largo)) {
-    *puntaje = 35;
-    multiplo = 4;
-  } else if (esEscalera(cartas, largo)) {
-    *puntaje = 30;
-    multiplo = 4;
-  } else if (esTrio(cartas, largo)) {
-    *puntaje = 30;
-    multiplo = 3;
-  } else if (esDoblePareja(cartas, largo)) {
-    *puntaje = 20;
-    multiplo = 2;
-  } else if (esPareja(cartas, largo)) {
-    *puntaje = 10;
-    multiplo = 2;
   } else { 
     cartaMasAlta(cartas, largo);
+    printf("Carta más alta!\n");
     *puntaje = 5;
     multiplo = 1;
   }
-  */
+  
   for (int i = 0 ; i < largo ; i++) {
     *puntaje += valorCarta(cartas[i]);
   }
@@ -203,12 +183,14 @@ void mejorJugada(Carta* cartas, int largo, int* puntaje) {
 }
 
 // ----------------------------------------------------------------
-/*
+
 bool esEscaleraDeColor(Carta* cartas, int largo) {
   if (largo < 5) return false;
+
   
+  return false;
 }
-*/
+
 
 bool esPoker(Carta* cartas, int largo) {
   if (largo < 4) return false;
@@ -222,6 +204,12 @@ bool esPoker(Carta* cartas, int largo) {
   return false;
 }
 
+bool esFull(Carta* cartas, int largo) {
+  if (largo < 5) return false;
+
+
+  return false;
+}
 
 bool esColor(Carta* cartas, int largo) {
   if (largo < 5) return false;
@@ -234,7 +222,6 @@ bool esColor(Carta* cartas, int largo) {
   return true;
 }
 
-/*
 bool esEscalera(Carta* cartas, int largo) {
   if (largo < 5) return false;
   for (int i = 0 ; i < largo ; i++) {
@@ -244,7 +231,6 @@ bool esEscalera(Carta* cartas, int largo) {
   }
   return true;
 }
-*/
 
 bool esTrio(Carta* cartas, int largo) {
   if (largo < 3) return false;
@@ -256,10 +242,12 @@ bool esTrio(Carta* cartas, int largo) {
   }
   return false;
 }
-/*
+
 bool esDoblePareja(Carta* cartas, int largo) {
+  
+  return false;
 }
-*/
+
 bool esPareja(Carta* cartas, int largo) {
   if (largo < 2) return false;
   for (int i = 0 ; i < largo - 1 ; i++) {
@@ -268,6 +256,11 @@ bool esPareja(Carta* cartas, int largo) {
     }
   }
   return false;
+}
+
+void cartaMasAlta(Carta* cartas, int largo) {
+
+  return;
 }
 
 // ----------------------------------------------------------------
