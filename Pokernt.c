@@ -71,8 +71,8 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 void  mostrarMano(Jugador jugador, int majosJugadas, int contadorDescartes) { 
   char *jugadas = {"Jugadas:"};
   char *descartes = {"Descartes:"};
-  printf("Mano: %45s %d / 5\n\n", jugadas, majosJugadas);
-  printf("%53s %d / 3\n\n", descartes, contadorDescartes);
+  printf("%49s %d / 5\n\n", jugadas, majosJugadas);
+  printf("Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
   mostrar_cartas(jugador.cartas, 8);
 }
 
