@@ -375,7 +375,7 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
 
 // ==================== OPCIÓN 1 ====================
 
-bool jugar(Nivel nivel) {
+bool jugar(Jugador jugador, Nivel nivel) {
   limpiarPantalla();
   // Inicializar variables y el mazo
   Carta mazo[52];
@@ -392,7 +392,6 @@ bool jugar(Nivel nivel) {
   Stack *mazoBarajado = stack_create(mazoBarajado); // Barajar el mazo
   barajarMazo(mazo, 52, mazoBarajado);
 
-  Jugador jugador; 
   jugador.puntaje = 0;
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
   // Pedir cartas al jugador
@@ -491,29 +490,31 @@ bool jugar(Nivel nivel) {
 // ==================== OPCIÓN 2 ====================
 // O
 
-void mostrar_tutorial(Jugador jugador_tutorial){
+void mostrar_tutorial(Jugador jugador_tutorial) {
+  printf("Bienvenido al juego de cartas!\n\n");
 
-    printf("Bienvenido al juego de cartas!\n\n");
+  printf("Objetivo del juego:\n");
+  printf("El objetivo es ganar puntos formando combinaciones de cartas.\n\n");
+  printf("...");
 
-    printf("Objetivo del juego:\n");
-    printf("El objetivo es ganar puntos formando combinaciones de cartas.\n\n");
-    printf("...");
-
-    presioneTeclaParaContinuar();
-    printf("Mecánicas Básicas del Juego:\n");
-    printf("1. Cada jugador recibe 8 cartas.\n");
-    printf("2. Las cartas tienen un número (1 a 13) y un palo (Corazones, Diamantes, Tréboles, Picas).\n\n");
-    mostrar_cartas(jugador_tutorial.cartas, 8);
-
-
-
-
-    mensajeEstrategias();
-
+  presioneTeclaParaContinuar();
+  printf("Mecánicas Básicas del Juego:\n");
+  printf("1. Cada jugador recibe 8 cartas.\n");
+  printf("2. Las cartas tienen un número (1 a 13) y un palo (Corazones, Diamantes, Tréboles, Picas).\n\n");
+  mostrar_cartas(jugador_tutorial.cartas, 8);
+  mensajeEstrategias();
 }
 
 
 // ==================== OPCIÓN 3 ====================
+
+
+
+// ==================== OPCIÓN 4 ====================
+
+void seleccionarComodin(Jugador jugador) {
+  
+}
 
 
 // ==================== MAIN ====================
@@ -537,6 +538,7 @@ int main() {
   getchar();
   limpiarPantalla();
   
+  Jugador jugador;  
   char opcion;
   bool derrota = false;
   do {
@@ -546,13 +548,14 @@ int main() {
       puts("1) Jugar");
       puts("2) Tutorial");
       puts("3) Configuración");
-      puts("4) Salir");
+      puts("4) Comodín");
+      puts("5) Salir");
       printf("Ingrese su opción: ");
       scanf(" %c", &opcion);
       switch (opcion) {
       case '1':
         do{
-          derrota = jugar(nivel);
+          derrota = jugar(jugador, nivel); 
           if(derrota) break;
           
           nivel.etapa++;
@@ -560,10 +563,9 @@ int main() {
           limpiarPantalla();
           mensajeVictoria();
           
-        }while(!derrota);
+        } while(!derrota);
         mensajeFinal();
         printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel.etapa);
-        
         break;
       case '2':
         mostrar_tutorial(jugador_tutorial);
@@ -571,6 +573,9 @@ int main() {
       case '3':
         break;
       case '4':
+        seleccionarComodin(jugador);
+        break;
+      case '5':
          printf("\nSaliendo del juego.\n");
          break;
       default:
@@ -579,7 +584,7 @@ int main() {
       presioneTeclaParaContinuar();
       limpiarPantalla();
 
-  } while (opcion != '4');
+  } while (opcion != '5');
 
   return 0;
 }
