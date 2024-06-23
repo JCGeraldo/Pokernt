@@ -72,7 +72,6 @@ void  mostrarMano(Jugador jugador, int majosJugadas) {
   char *jugadas = {"Jugadas:"};
   printf("Mano: %40s %d / 5\n\n", jugadas, majosJugadas);
   mostrar_cartas(jugador.cartas, 8);
-  printf("\n\n");
 }
 
 // ----------------------------------------------------------------
