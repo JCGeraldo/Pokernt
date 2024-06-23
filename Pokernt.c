@@ -65,6 +65,7 @@ bool noExiste(int carta,int *cartasElegidas){
   }
   return true;
 }
+
 void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
   for(int i = 0; i < 8; i++)
     jugador->cartas[i] = *(Carta*)stack_pop(mazoBarajado);
@@ -226,12 +227,14 @@ bool esPoker(Carta* cartas, int largo) {
 
 bool esFull(Carta* cartas, int largo) {
   if (largo < 5) return false;
-
   
+  int numerosDistintos = 1;
 
-  qsort(cartas, largo, sizeof(Carta), compararNumerico);
-
-  bool tieneTrio = false;
+  for(int i = 0; i < largo - 1; i++)
+    if(cartas[i].numero != cartas[i+1].numero) numerosDistintos++;
+  return numerosDistintos == 2;
+  
+  /*bool tieneTrio = false;
   bool tienePareja = false;
 
   // Buscar el trío
@@ -256,7 +259,7 @@ bool esFull(Carta* cartas, int largo) {
       break;
     }
   }
-  return tieneTrio && tienePareja;
+  return tieneTrio && tienePareja;*/
 }
 
 bool esColor(Carta* cartas, int largo) {
@@ -370,16 +373,15 @@ void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
 
 // ==================== OPCIÓN 1 ====================
 
-bool jugar() {
+bool jugar(Nivel nivel) {
   limpiarPantalla();
   // Inicializar variables y el mazo
-  bool derrota = true;
   Carta mazo[52];
   int cartasElegidas[5] = {0,0,0,0,0};
   
-  Nivel nivel;  
+  /*Nivel nivel;  
   nivel.etapa = 1;
-  nivel.pozo = 100; //Puntaje requerido, condición de victoria.
+  nivel.pozo = 100*/; //Puntaje requerido, condición de victoria.
   int manosJugadas = 0; //Limite de manos, condición de derrota.
   
   inicializarMazo(mazo);
@@ -454,7 +456,9 @@ bool jugar() {
     
     asignacionPuntaje(&jugador, cartasElegidas, cont); // IAN 
     presioneTeclaParaContinuar();
-    
+
+    if(jugador.puntaje >= nivel.pozo)
+      return false;
     //asignar puntaje a la mano jugada, mostrar puntaje total
 
     //comprobar si se cumple la condicion de victoria
@@ -469,9 +473,9 @@ bool jugar() {
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
     printf("\n\n");
     limpiarPantalla();
-  } while(manosJugadas < 20);
+  } while(manosJugadas < 1);
 
-  return derrota;
+  return true;
 }
 
 // ==================== OPCIÓN 2 ====================
@@ -498,6 +502,9 @@ int main() {
   char opcion;
   bool derrota = false;
   do {
+      Nivel nivel;
+      nivel.etapa = 1;
+      nivel.pozo = 100;
       puts("1) Jugar");
       puts("2) Tutorial");
       puts("3) Configuración");
@@ -508,9 +515,30 @@ int main() {
       switch (opcion) {
       case '1':
         do{
-          derrota = jugar(); //Agregar argumento del nivel?
-          //Actualizar el nivel y el pozo
+          derrota = jugar(nivel);
+          if(derrota) break;
+          
+          nivel.etapa++;
+          nivel.pozo *= 1.5;
+          limpiarPantalla();
+          puts("==========================================================");
+          puts("                   ♠♣♦♥  VICTORIA  ♥♦♣♠");
+          puts("==========================================================");
+          printf("                   ───▄█▄▄▄▄▄▄▄───▄──\n");
+          printf("                   ──█▀██▀▄▄▀███▄▐─▌─\n");
+          printf("                   ─████▌█▌▐█▐███▄▀▄─\n");
+          printf("                   ──████▄▀▀▄████────\n");
+          printf("                   ───▀█▀▀▀▀▀▀█▀─────\n\n");
+          puts("\nPresione una tecla para continuar al siguiente nivel...");
+          getchar();
+          limpiarPantalla();
+          
         }while(!derrota);
+        puts("==========================================================");
+        puts("                   ♠♣♦♥  FIN DEL JUEGO  ♥♦♣♠");
+        puts("==========================================================");
+        printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel.etapa);
+        
         break;
       case '2':
         //mostrarTutorial();
