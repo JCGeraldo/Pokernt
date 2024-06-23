@@ -73,8 +73,9 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 
 // ----------------------------------------------------------------
 
-void  mostrarMano(Jugador jugador) {
-  printf("Mano:\n\n");
+void  mostrarMano(Jugador jugador, int majosJugadas) { 
+  char *jugadas = {"Jugadas:"};
+  printf("Mano: %40s %d / 5\n\n", jugadas, majosJugadas);
   for(int i = 0; i < 8; i++)
     printf("|%d %d|  ", jugador.cartas[i].numero, jugador.cartas[i].palo);
   printf("\n\n");
@@ -233,33 +234,6 @@ bool esFull(Carta* cartas, int largo) {
   for(int i = 0; i < largo - 1; i++)
     if(cartas[i].numero != cartas[i+1].numero) numerosDistintos++;
   return numerosDistintos == 2;
-  
-  /*bool tieneTrio = false;
-  bool tienePareja = false;
-
-  // Buscar el trío
-  for (int i = 0 ; i < largo - 2 ; i++) {
-    if (cartas[i].numero == cartas[i+1].numero && 
-        cartas[i].numero == cartas[i+2].numero) {
-      tieneTrio = true;
-      // Quitar el trío encontrado y seguir buscando la pareja
-      i += 2; // Saltar las cartas del trío
-      break;
-    }
-  }
-
-  // Buscar la pareja
-  for (int i = 0; i < largo - 1; i++) {
-    if (cartas[i].numero == cartas[i+1].numero) {
-      // Si el trío ya fue encontrado, asegurarse de no contar las mismas cartas como pareja
-      if (tieneTrio && (i > 1 && cartas[i].numero == cartas[i-1].numero && cartas[i].numero == cartas[i-2].numero)) {
-        continue;
-      }
-      tienePareja = true;
-      break;
-    }
-  }
-  return tieneTrio && tienePareja;*/
 }
 
 bool esColor(Carta* cartas, int largo) {
@@ -400,8 +374,8 @@ bool jugar(Nivel nivel) {
     
     //Eleccion de cartas.
     do{
-      printf("Puntaje = %d                    Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
-      mostrarMano(jugador);
+      printf("Puntaje = %-30d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
+      mostrarMano(jugador, manosJugadas);
       puts("============================================================\n");
       puts("Elija una opcion: ");
       puts("  1) Elegir cartas");
@@ -444,8 +418,8 @@ bool jugar(Nivel nivel) {
           break;
       }
     }while(opcion != '1' && opcion != '2' && opcion != '3');
-    manosJugadas++;
     if(cont == 0)continue;
+    manosJugadas++;
     //Mostrar cartas elegidas y pedir confirmacion(opcional)
     printf("Cartas elegidas: \n");
     for(int i = 0; i < cont; i++){
@@ -468,12 +442,11 @@ bool jugar(Nivel nivel) {
       jugador.cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
       cartasElegidas[i] = 0;
     }
-    
         
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
     printf("\n\n");
     limpiarPantalla();
-  } while(manosJugadas < 1);
+  } while(manosJugadas < 5);
 
   return true;
 }
