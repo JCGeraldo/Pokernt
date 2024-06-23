@@ -8,7 +8,7 @@
 #include "tdas/heap.h"
 #include "tdas/stack.h"
 #include "tdas/queue.h"
-#include "tdas/extra.h"
+#include "tdas/map.h"
 #include "cartas.c"
 
 typedef struct {
@@ -26,14 +26,33 @@ typedef struct {
 void limpiarBuffer(){
   while(getchar() != '\n');
 }
+int is_equal(void *key1, void *key2) {
+  return *(int *)key1 == *(int *)key2;
+}
+
+void inicializarMapa(Map *mapa){
+  for(int i = 1; i <= 13; i++){
+    int *numero = malloc(sizeof(int));
+    *numero = i;
+    int *puntaje = malloc(sizeof(int));
+    if(i == 1)
+      *puntaje = 15;
+    else if (i > 10)
+      *puntaje = 10;
+    else
+      *puntaje = i;
+    map_insert(mapa, numero, puntaje);
+  }
+}
 // ----------------------------------------------------------------
 
-void inicializarMazo(Carta *mazo) {
+void inicializarMazo(Carta *mazo, Map *mapa) {
   int index = 0;
   for (int palo = 0 ; palo <= 3 ; palo++) {
     for (int valor = 1 ; valor <= 13 ; valor++) {
       mazo[index].numero = valor;
       mazo[index].palo = palo;
+      mazo[index].puntaje = *(int*)map_search(mapa, &valor)->value;;
       index++;
     }
   }
@@ -110,26 +129,6 @@ void ordenarCartasPalo(Carta* cartas, int largo) {
 
 // ----------------------------------------------------------------
 
-int valorCarta(Carta carta) {
-  // Falta el caso del comodín
-  int puntaje;
-  switch (carta.numero) {
-    case 1: // As
-      puntaje = 15;
-        break;
-    case 11: // Jota
-    case 12: // Reina
-    case 13: // Rey
-      puntaje = 10;
-        break;
-    default:
-      puntaje = carta.numero; // Los valores 2-10 se asignan directamente
-        break;
-  }
-  printf("%d ", puntaje);
-  return puntaje;
-}
-
 int compararNumerico(const void *a, const void *b) {
   Carta *cartaA = (Carta *)a;
   Carta *cartaB = (Carta *)b;
@@ -192,7 +191,8 @@ void mejorJugada(Carta* cartas, int largo, int* puntaje) {
   }
   
   for (int i = 0 ; i < largo ; i++) {
-    *puntaje += valorCarta(cartas[i]);
+    printf("%d ", cartas[i].puntaje);
+    *puntaje += cartas[i].puntaje;
   }
   printf("\n");
   printf("Puntaje: %d\n", *puntaje);
@@ -375,19 +375,16 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
 
 // ==================== OPCIÓN 1 ====================
 
-bool jugar(Jugador jugador, Nivel nivel) {
+bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
   limpiarPantalla();
   // Inicializar variables y el mazo
   Carta mazo[52];
   int cartasElegidas[5] = {0,0,0,0,0};
 
-  /*Nivel nivel;  
-  nivel.etapa = 1;
-  nivel.pozo = 100*/; //Puntaje requerido, condición de victoria.
   int manosJugadas = 0; //Limite de manos, condición de derrota.
   int contadorDescartes = 0;
 
-  inicializarMazo(mazo);
+  inicializarMazo(mazo, mapa);
 
   Stack *mazoBarajado = stack_create(mazoBarajado); // Barajar el mazo
   barajarMazo(mazo, 52, mazoBarajado);
@@ -483,12 +480,11 @@ bool jugar(Jugador jugador, Nivel nivel) {
     printf("\n\n");
     limpiarPantalla();
   } while(manosJugadas < 5);
-
+  stack_clean(mazoBarajado);
   return true;
 }
 
 // ==================== OPCIÓN 2 ====================
-// O
 
 void mostrar_tutorial(Jugador jugador_tutorial) {
   printf("Bienvenido al juego de cartas!\n\n");
@@ -520,6 +516,8 @@ void seleccionarComodin(Jugador jugador) {
 // ==================== MAIN ====================
 
 int main() {
+  Map *mapa = map_create(is_equal);
+  inicializarMapa(mapa);
   Jugador jugador_tutorial = {
       .cartas = {
           {1, 0, 0}, {13, 1, 0}, {11, 1, 0}, {12, 1, 0},
@@ -555,9 +553,8 @@ int main() {
       switch (opcion) {
       case '1':
         do{
-          derrota = jugar(jugador, nivel); 
+          derrota = jugar(jugador, nivel, mapa); 
           if(derrota) break;
-          
           nivel.etapa++;
           nivel.pozo *= 1.5;
           limpiarPantalla();
