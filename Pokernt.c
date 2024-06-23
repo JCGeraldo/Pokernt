@@ -68,9 +68,11 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 
 // ----------------------------------------------------------------
 
-void  mostrarMano(Jugador jugador, int majosJugadas) { 
+void  mostrarMano(Jugador jugador, int majosJugadas, int contadorDescartes) { 
   char *jugadas = {"Jugadas:"};
+  char *descartes = {"Descartes:"};
   printf("Mano: %45s %d / 5\n\n", jugadas, majosJugadas);
+  printf("%53s %d / 3\n\n", descartes, contadorDescartes);
   mostrar_cartas(jugador.cartas, 8);
 }
 
@@ -338,6 +340,39 @@ void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
 
 }
 
+void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescartes) {
+  if (*contadorDescartes >= 3) {
+      limpiarPantalla();
+      printf("Has alcanzado el máximo número de descartes permitidos.");
+      return;
+  }
+
+  int carta;
+  int cont = 0;
+  int cartasElegidas[5] = {0, 0, 0, 0, 0};
+
+  do {
+    printf("Ingrese el número de la carta que desea descartar (1-8): ");
+    if (!scanf("%d", &carta) || carta < 1 || carta > 8) {
+      puts("Ingrese un número válido !! ");
+      limpiarBuffer();
+    } else if (noExiste(carta, cartasElegidas)) {
+      cartasElegidas[cont] = carta;
+      cont++;
+    } else {
+      printf("\nLa carta ya fue elegida, ingrese otra!!\n ");
+      limpiarBuffer();
+    }
+  } while (cont < 5 && carta != 0);
+
+  for (int i = 0; i < cont; i++) {
+    jugador->cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
+  }
+
+  (*contadorDescartes)++;
+  limpiarPantalla();
+}
+
 // ==================== OPCIÓN 1 ====================
 
 bool jugar(Nivel nivel) {
@@ -345,17 +380,18 @@ bool jugar(Nivel nivel) {
   // Inicializar variables y el mazo
   Carta mazo[52];
   int cartasElegidas[5] = {0,0,0,0,0};
-  
+
   /*Nivel nivel;  
   nivel.etapa = 1;
   nivel.pozo = 100*/; //Puntaje requerido, condición de victoria.
   int manosJugadas = 0; //Limite de manos, condición de derrota.
-  
+  int contadorDescartes = 0;
+
   inicializarMazo(mazo);
-  
+
   Stack *mazoBarajado = stack_create(mazoBarajado); // Barajar el mazo
   barajarMazo(mazo, 52, mazoBarajado);
-  
+
   Jugador jugador; 
   jugador.puntaje = 0;
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
@@ -364,17 +400,20 @@ bool jugar(Nivel nivel) {
   char opcion;
   do{
     int cont = 0;
-    
+
     //Eleccion de cartas.
     do{
-      printf("Puntaje = %-35d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
-      mostrarMano(jugador, manosJugadas);
-      puts("===============================================================\n");
+      printf("Puntaje = %-30d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
+      mostrarMano(jugador, manosJugadas, contadorDescartes);
+      puts("============================================================\n");
       puts("Elija una opcion: ");
       puts("  1) Elegir cartas");
       puts("  2) Ordenar mano por palo");
       puts("  3) Ordenar mano por valor");
-      
+      if (contadorDescartes < 3) {
+          puts("  4) Descartar cartas");
+      }
+
       scanf(" %c", &opcion);
       switch(opcion){
         case '1':
@@ -406,11 +445,19 @@ bool jugar(Nivel nivel) {
           ordenarCartas(jugador.cartas, 8);
           limpiarPantalla();
           break;
+        case '4':
+          if (contadorDescartes < 3) {
+            descartarCartas(&jugador, mazoBarajado, &contadorDescartes);
+          }
+          limpiarPantalla();
+        break;
         default:
           puts("Ingrese una opción válida: ");
           break;
       }
-    }while(opcion != '1' && opcion != '2' && opcion != '3');
+    }while(opcion != '1' && opcion != '2' && opcion != '3' && opcion != '4');
+
+    if (opcion == '4') continue;
     if(cont == 0)continue;
     manosJugadas++;
     //Mostrar cartas elegidas y pedir confirmacion(opcional)
@@ -420,7 +467,7 @@ bool jugar(Nivel nivel) {
       printf("|%d %d|  ", jugador.cartas[cartasElegidas[i] - 1].numero, jugador.cartas[cartasElegidas[i] - 1].palo);
     }
     printf("\n");
-    
+
     asignacionPuntaje(&jugador, cartasElegidas, cont);
     presioneTeclaParaContinuar();
 
@@ -432,7 +479,7 @@ bool jugar(Nivel nivel) {
       jugador.cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
       cartasElegidas[i] = 0;
     }
-        
+
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
     printf("\n\n");
     limpiarPantalla();
