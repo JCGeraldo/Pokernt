@@ -186,3 +186,47 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
   }
   printf("\n\n");
 }
+
+void mostrarChancho(){
+  printf("          ───▄█▄▄▄▄▄▄▄───▄──\n");
+  printf("          ──█▀██▀▄▄▀███▄▐─▌─\n");
+  printf("          ─████▌█▌▐█▐███▄▀▄─\n");
+  printf("          ──████▄▀▀▄████────\n");
+  printf("          ───▀█▀▀▀▀▀▀█▀─────\n");
+  printf("         ▀█████████████████▀\n");
+  printf("          █               █ \n");
+  printf("          █               █ \n");
+  printf("          █               █ \n");
+}
+void mensajeVictoria(){
+  puts("====================================");
+  puts("         ♠♣♦♥  VICTORIA  ♥♦♣♠");
+  puts("====================================");
+  mostrarChancho();
+  puts("\nPresione para continuar al siguiente nivel...");
+  getchar();
+  limpiarPantalla();
+}
+void mensajeFinal(){
+  puts("==========================================================");
+  puts("                   ♠♣♦♥  FIN DEL JUEGO  ♥♦♣♠");
+  puts("==========================================================");
+}
+
+void mensajeEstrategias(){
+  printf("Controles Básicos:\n");
+  printf("1. Selecciona una carta para jugar.\n");
+  printf("2. Juega una carta seleccionada para formar combinaciones.\n");
+  printf("3. Pasa el turno cuando no puedes jugar una carta.\n\n");
+
+  printf("Interfaz de Usuario:\n");
+  printf("1. La mano del jugador muestra las cartas que tienes.\n");
+  printf("2. La mesa de juego muestra las cartas jugadas.\n");
+  printf("3. Los puntajes muestran cuántos puntos tiene cada jugador.\n\n");
+
+  printf("Estrategia Básica:\n");
+  printf("1. Intenta formar combinaciones ganadoras como pares o tríos.\n");
+  printf("2. Prioriza cartas altas para ganar más puntos.\n\n");
+
+  printf("¡Buena suerte y diviértete jugando!\n");
+}

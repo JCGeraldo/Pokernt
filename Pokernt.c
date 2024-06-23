@@ -508,21 +508,7 @@ void mostrar_tutorial(Jugador jugador_tutorial){
 
 
 
-    printf("Controles Básicos:\n");
-    printf("1. Selecciona una carta para jugar.\n");
-    printf("2. Juega una carta seleccionada para formar combinaciones.\n");
-    printf("3. Pasa el turno cuando no puedes jugar una carta.\n\n");
-
-    printf("Interfaz de Usuario:\n");
-    printf("1. La mano del jugador muestra las cartas que tienes.\n");
-    printf("2. La mesa de juego muestra las cartas jugadas.\n");
-    printf("3. Los puntajes muestran cuántos puntos tiene cada jugador.\n\n");
-
-    printf("Estrategia Básica:\n");
-    printf("1. Intenta formar combinaciones ganadoras como pares o tríos.\n");
-    printf("2. Prioriza cartas altas para ganar más puntos.\n\n");
-
-    printf("¡Buena suerte y diviértete jugando!\n");
+    mensajeEstrategias();
 
 }
 
@@ -545,15 +531,8 @@ int main() {
   puts("\n========================================");
   puts("         ♠♣♦♥  Pokern't  ♥♦♣♠");
   puts("========================================");
-  printf("          ───▄█▄▄▄▄▄▄▄───▄──\n");
-  printf("          ──█▀██▀▄▄▀███▄▐─▌─\n");
-  printf("          ─████▌█▌▐█▐███▄▀▄─\n");
-  printf("          ──████▄▀▀▄████────\n");
-  printf("          ───▀█▀▀▀▀▀▀█▀─────\n\n");
-  printf("         ▀█████████████████▀\n");
-  printf("          █               █ \n");
-  printf("          █               █ \n");
-  printf("          █               █ \n");
+
+  mostrarChancho();
   puts("\nPresione una tecla para jugar...");
   getchar();
   limpiarPantalla();
@@ -568,7 +547,6 @@ int main() {
       puts("2) Tutorial");
       puts("3) Configuración");
       puts("4) Salir");
-  
       printf("Ingrese su opción: ");
       scanf(" %c", &opcion);
       switch (opcion) {
@@ -580,22 +558,10 @@ int main() {
           nivel.etapa++;
           nivel.pozo *= 1.5;
           limpiarPantalla();
-          puts("==========================================================");
-          puts("                   ♠♣♦♥  VICTORIA  ♥♦♣♠");
-          puts("==========================================================");
-          printf("                   ───▄█▄▄▄▄▄▄▄───▄──\n");
-          printf("                   ──█▀██▀▄▄▀███▄▐─▌─\n");
-          printf("                   ─████▌█▌▐█▐███▄▀▄─\n");
-          printf("                   ──████▄▀▀▄████────\n");
-          printf("                   ───▀█▀▀▀▀▀▀█▀─────\n\n");
-          puts("\nPresione una tecla para continuar al siguiente nivel...");
-          getchar();
-          limpiarPantalla();
+          mensajeVictoria();
           
         }while(!derrota);
-        puts("==========================================================");
-        puts("                   ♠♣♦♥  FIN DEL JUEGO  ♥♦♣♠");
-        puts("==========================================================");
+        mensajeFinal();
         printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel.etapa);
         
         break;
