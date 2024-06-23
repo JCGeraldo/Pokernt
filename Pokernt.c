@@ -444,8 +444,8 @@ bool jugar(Nivel nivel) {
           break;
       }
     }while(opcion != '1' && opcion != '2' && opcion != '3');
-    manosJugadas++;
     if(cont == 0)continue;
+    manosJugadas++;
     //Mostrar cartas elegidas y pedir confirmacion(opcional)
     printf("Cartas elegidas: \n");
     for(int i = 0; i < cont; i++){
@@ -454,17 +454,14 @@ bool jugar(Nivel nivel) {
     }
     printf("\n");
     
-    asignacionPuntaje(&jugador, cartasElegidas, cont); // IAN 
+    asignacionPuntaje(&jugador, cartasElegidas, cont);
     presioneTeclaParaContinuar();
 
-    if(jugador.puntaje >= nivel.pozo)
+    if(jugador.puntaje >= nivel.pozo)//Condición de victoria
       return false;
-    //asignar puntaje a la mano jugada, mostrar puntaje total
 
-    //comprobar si se cumple la condicion de victoria
-
-    //quitar de la mano las cartas elegidas, vaciar la lista de cartas elegidas y rellenar la mano con cartas del mazo.
-    for(int i = 0 ; i < 5 ; i++) { // Aqui se reemplazan las cartas de la mano con otras del mazo
+    //se reemplazan las cartas usadas por otras del mazo y se vacia la lista de cartas elegidas.
+    for(int i = 0 ; i < 5 ; i++) {
       jugador.cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
       cartasElegidas[i] = 0;
     }
@@ -479,6 +476,117 @@ bool jugar(Nivel nivel) {
 }
 
 // ==================== OPCIÓN 2 ====================
+//       .------.------.------.------.
+//       |A♥  ♥ |A /\  |A _   |A .   |
+//       |♥ ♥♥ ♥| /  \ | ( )  | / \  |
+//       | ♥  ♥ | \  / |(_x_) |(_,_) |
+//       |  ♥♥ A|  \/ A|  Y  A|  I  A|  
+//       `------^------^------'------'
+//       .------.------.------.------.------.------.------.------.
+//       |A_  _ |A_  _ |A /\  |A /\  |A _   |A _   |A .   |A .   |
+//       |( \/ )|( \/ )| /  \ | /  \ | ( )  | ( )  | / \  | / \  |
+//       | \  / | \  / | \  / | \  / |(_x_) |(_x_) |(_,_) |(_,_) |
+//       |  \/ A|  \/ A|  \/ A|  \/ A|  Y  A|  Y  A|  I  A|  I  A| 
+//       `------^------^------^------^------^------^------^------´
+
+//cora1 = "♥";
+//diam1 = "♦";
+//treb1 = "♣";
+//pic1 = "♠";
+
+const char* palo_to_char(int palo) {
+    switch(palo) {
+        case 0: return "♥";
+        case 1: return "♦";
+        case 2: return "♣";
+        case 3: return "♠";
+        default: return " ";
+    }
+}
+
+const char* numero_to_char(char numero) {
+    switch(numero) {
+        case 1: return "A";
+        case 11: return "J";
+        case 12: return "Q";
+        case 13: return "K";
+        default: {
+            static char num[6];
+            snprintf(num, sizeof(num), "%d", numero);
+            return num;
+        }
+    }
+}
+void mostrar_cartas(Carta *cartas, int cantidad){
+
+    printf(".------.------.------.------.------.------.------.------.\n");
+
+    // Línea 1
+    for (int i = 0 ; i < cantidad; i++) {
+        printf("|%s%-2s    ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+    }
+    printf("|\n");
+
+    // Línea 2
+    for (int i = 0 ; i < cantidad ; i++) {
+        printf("|  %s%s  ", palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+    }
+    printf("|\n");
+
+    // Línea 3
+    for (int i = 0 ; i < cantidad ; i++) {
+        printf("|  %s%s  ", palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+    }
+    printf("|\n");
+
+    // Línea 4
+    for (int i = 0 ; i < cantidad ; i++) {
+        printf("|    %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+    }
+    printf("|\n");
+
+    printf("`------^------^------^------^------^------^------^------´\n");
+    for (int i = 1 ; i <= cantidad ; i++){
+        if (i == 1)printf("%5d", i);
+        else printf("%7d", i);
+    }
+    printf("\n\n");
+}
+
+void mostrar_tutorial(Jugador jugador_tutorial){
+
+    printf("Bienvenido al juego de cartas!\n\n");
+
+    printf("Objetivo del juego:\n");
+    printf("El objetivo es ganar puntos formando combinaciones de cartas.\n\n");
+    printf("...");
+
+    presioneTeclaParaContinuar();
+    printf("Mecánicas Básicas del Juego:\n");
+    printf("1. Cada jugador recibe 8 cartas.\n");
+    printf("2. Las cartas tienen un número (1 a 13) y un palo (Corazones, Diamantes, Tréboles, Picas).\n\n");
+    mostrar_cartas(jugador_tutorial.cartas, 8);
+
+
+
+
+    printf("Controles Básicos:\n");
+    printf("1. Selecciona una carta para jugar.\n");
+    printf("2. Juega una carta seleccionada para formar combinaciones.\n");
+    printf("3. Pasa el turno cuando no puedes jugar una carta.\n\n");
+
+    printf("Interfaz de Usuario:\n");
+    printf("1. La mano del jugador muestra las cartas que tienes.\n");
+    printf("2. La mesa de juego muestra las cartas jugadas.\n");
+    printf("3. Los puntajes muestran cuántos puntos tiene cada jugador.\n\n");
+
+    printf("Estrategia Básica:\n");
+    printf("1. Intenta formar combinaciones ganadoras como pares o tríos.\n");
+    printf("2. Prioriza cartas altas para ganar más puntos.\n\n");
+
+    printf("¡Buena suerte y diviértete jugando!\n");
+
+}
 
 
 // ==================== OPCIÓN 3 ====================
@@ -487,6 +595,14 @@ bool jugar(Nivel nivel) {
 // ==================== MAIN ====================
 
 int main() {
+  Jugador jugador_tutorial = {
+      .cartas = {
+          {1, 0, 0}, {13, 1, 0}, {11, 1, 0}, {12, 1, 0},
+          {5, 1, 0}, {9, 0, 0}, {3, 3, 0}, {10, 1, 0}
+      },
+      .puntaje = 0,
+      .comodin = 0
+  };
 
   puts("\n========================================");
   puts("         ♠♣♦♥  Pokern't  ♥♦♣♠");
@@ -496,9 +612,14 @@ int main() {
   printf("          ─████▌█▌▐█▐███▄▀▄─\n");
   printf("          ──████▄▀▀▄████────\n");
   printf("          ───▀█▀▀▀▀▀▀█▀─────\n\n");
+  printf("         ▀█████████████████▀\n");
+  printf("          █               █ \n");
+  printf("          █               █ \n");
+  printf("          █               █ \n");
   puts("\nPresione una tecla para jugar...");
   getchar();
   limpiarPantalla();
+  
   char opcion;
   bool derrota = false;
   do {
@@ -541,7 +662,7 @@ int main() {
         
         break;
       case '2':
-        //mostrarTutorial();
+        mostrar_tutorial(jugador_tutorial);
         break;
       case '3':
         break;
