@@ -90,11 +90,25 @@ int compararCartas(const void *a, const void *b) {
   return cartaA->palo - cartaB->palo;
 }
 
+int compararCartasPalo(const void *a, const void *b) {
+  Carta *cartaA = (Carta *)a;
+  Carta *cartaB = (Carta *)b;
+
+  if (cartaA->palo != cartaB->palo)
+      return cartaA->palo - cartaB->palo;
+  return cartaA->numero - cartaB->numero;
+}
+
 // ----------------------------------------------------------------
 
 void ordenarCartas(Carta* cartas, int largo) {
   if (largo < 2) return;
   qsort(cartas, largo, sizeof(Carta), compararCartas);
+}
+
+void ordenarCartasPalo(Carta* cartas, int largo) {
+  if (largo < 2) return;
+  qsort(cartas, largo, sizeof(Carta), compararCartasPalo);
 }
 
 // ----------------------------------------------------------------
@@ -378,29 +392,58 @@ bool jugar() {
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
   // Pedir cartas al jugador
   int carta;
-  
+  char opcion;
   do{
     int cont = 0;
-    printf("Puntaje = %d                    Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
-    mostrarMano(jugador);
-    //Eleccion de cartas, falta filtrar elecciones repetidas.
-    printf("Ingrese el número de la carta que desea pedir (1-8): ");
+    
+    //Eleccion de cartas.
     do{
-      do{
-        limpiarBuffer();
-        if(!scanf("%d", &carta) || carta < 0 || carta > 8 ){
-          puts("Ingrese un número válido: ");
-        }
-      }while(carta < 0 || carta > 8);
-      if(!carta) break;
-      if(noExiste(carta,cartasElegidas)) {
-        cartasElegidas[cont] = carta;
-        cont++;
+      printf("Puntaje = %d                    Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
+      mostrarMano(jugador);
+      puts("============================================================\n");
+      puts("Elija una opcion: ");
+      puts("  1) Elegir cartas");
+      puts("  2) Ordenar mano por palo");
+      puts("  3) Ordenar mano por valor");
+      
+      scanf(" %c", &opcion);
+      switch(opcion){
+        case '1':
+          printf("Ingrese el número de la carta que desea jugar (1-8): ");
+          do{
+            do{
+              if(!scanf("%d", &carta) || carta < 0 || carta > 8 ){
+                puts("Ingrese un número válido: ");
+                limpiarBuffer();
+              }
+            }while(carta < 0 || carta > 8);
+            if(!carta && cont == 0){
+              puts("Elija al menos una carta");
+              continue;
+            }
+            if(!carta) break;
+            if(noExiste(carta,cartasElegidas)) {
+              cartasElegidas[cont] = carta;
+              cont++;
+            }
+            else printf("La carta ya fue elegida, ingrese otra: ");
+          }while(cont < 5);
+          break;
+        case '2':
+          ordenarCartasPalo(jugador.cartas, 8);
+          limpiarPantalla();
+          break;
+        case '3':
+          ordenarCartas(jugador.cartas, 8);
+          limpiarPantalla();
+          break;
+        default:
+          puts("Ingrese una opción válida: ");
+          break;
       }
-      else printf("La carta ya fue elegida, ingrese otra: ");
-    } while(cont < 5);
+    }while(opcion != '1' && opcion != '2' && opcion != '3');
     manosJugadas++;
-  
+    if(cont == 0)continue;
     //Mostrar cartas elegidas y pedir confirmacion(opcional)
     printf("Cartas elegidas: \n");
     for(int i = 0; i < cont; i++){
@@ -462,7 +505,6 @@ int main() {
   
       printf("Ingrese su opción: ");
       scanf(" %c", &opcion);
-      
       switch (opcion) {
       case '1':
         do{
