@@ -70,7 +70,7 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 
 void  mostrarMano(Jugador jugador, int majosJugadas) { 
   char *jugadas = {"Jugadas:"};
-  printf("Mano: %40s %d / 5\n\n", jugadas, majosJugadas);
+  printf("Mano: %45s %d / 5\n\n", jugadas, majosJugadas);
   mostrar_cartas(jugador.cartas, 8);
 }
 
@@ -367,9 +367,9 @@ bool jugar(Nivel nivel) {
     
     //Eleccion de cartas.
     do{
-      printf("Puntaje = %-30d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
+      printf("Puntaje = %-35d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
       mostrarMano(jugador, manosJugadas);
-      puts("============================================================\n");
+      puts("===============================================================\n");
       puts("Elija una opcion: ");
       puts("  1) Elegir cartas");
       puts("  2) Ordenar mano por palo");

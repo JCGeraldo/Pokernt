@@ -57,7 +57,7 @@ void linea1(Carta *cartas, int cantidad) {
   printf(".-------.-------.-------.-------.-------.-------.-------.-------.\n");
   for (int i = 0 ; i < cantidad; i++) {
     if (cartas[i].numero == 10) {
-      printf("|%s%-2s    ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+      printf("|%s%-2s  %s ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo) , palo_to_char(cartas[i].palo));
     } else {
       printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
     }
@@ -87,7 +87,7 @@ void linea2(Carta *cartas, int cantidad) {
     } else if (cartas[i].numero == 9) {
       printf("| %s %s %s ", figura, figura, figura);
     } else if (cartas[i].numero == 10) {
-      printf("|  %s%s%s  ", figura, figura, figura);
+      printf("| %s %s %s ", figura, figura, figura);
     } else {
       printf("|       ");
     }
@@ -117,7 +117,7 @@ void linea3(Carta *cartas, int cantidad) {
     } else if (cartas[i].numero == 9) {
       printf("| %s %s %s ", figura, figura, figura);
     } else if (cartas[i].numero == 10) {
-      printf("| %s%s %s%s ", figura, figura, figura, figura);
+      printf("|  %s %s  ", figura, figura);
     } else {
       printf("|       ");
     }
@@ -147,7 +147,7 @@ void linea4(Carta *cartas, int cantidad) {
     } else if (cartas[i].numero == 9) {
       printf("| %s %s %s ", figura, figura, figura);
     } else if (cartas[i].numero == 10) {
-      printf("|  %s%s%s  ", figura, figura, figura);
+      printf("| %s %s %s ", figura, figura, figura);
     } else {
       printf("|       ");
     }
@@ -156,14 +156,15 @@ void linea4(Carta *cartas, int cantidad) {
 }
 
 void linea5(Carta *cartas, int cantidad) {
-  for (int i = 0 ; i < cantidad; i++) {
+  for (int i = 0 ; i < cantidad ; i++) {
     if (cartas[i].numero == 10) {
-      printf("|%s%-2s    ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+      printf("| %s  %s%s", palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
     } else {
-      printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+      printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
     }
   }
   printf("|\n");
+
   printf("`-------^-------^-------^-------^-------^-------^-------^-------´\n");
 }
 
