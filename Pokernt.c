@@ -12,15 +12,19 @@
 #include "tdas/map.h"
 #include "cartas.c"
 
+
 typedef struct {
   int etapa; // Nivel de juego
   int pozo; // Pozo del nivel
 } Nivel;
 
+
+
 // ----------------------------------------------------------------
 void limpiarBuffer(){
   while(getchar() != '\n');
 }
+
 int is_equal(void *key1, void *key2) {
   return *(int *)key1 == *(int *)key2;
 }
@@ -509,6 +513,9 @@ void reiniciarGuardado(Nivel *nivel, float factor){
 }
 // ==================== OPCIÓN 2 ====================
 
+
+
+
 void mostrar_tutorial(Jugador jugador_tutorial) {
   limpiarPantalla();
   mostrarTitulo();
@@ -549,8 +556,9 @@ void seleccionarDificultad(float *factor, Nivel* nivel){
     if(!scanf("%d", &opcion) || opcion < 1 || opcion > 5){
       puts("Ingrese una opción válida !!");
       limpiarBuffer();
+    if(opcion == 5) return;
     }
-  }while(opcion < 1 || opcion > 4);
+  }while(opcion < 1 || opcion > 5);
   switch (opcion){
     case 1:
       temp = 1.2;
@@ -565,7 +573,7 @@ void seleccionarDificultad(float *factor, Nivel* nivel){
       temp = 2.4;
       break;
     case 5:
-      return;
+      break;
   }
   if(*factor != temp){
     nivel->etapa = 1;

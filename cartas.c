@@ -5,6 +5,30 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define RESET "\033[0m"
+#define BLACK "\033[0;30m"
+#define RED "\033[0;31m"
+#define GREEN "\033[0;32m"
+#define YELLOW "\033[0;33m"
+#define BLUE "\033[0;34m"
+#define MAGENTA "\033[0;35m"
+#define CYAN "\033[0;36m"
+#define WHITE "\033[0;37m"
+#define BLACK_B "\033[1;30m"
+#define RED_B "\033[1;31m"
+#define GREEN_B "\033[1;32m"
+#define YELLOW_B "\033[1;33m"
+#define BLUE_B "\033[1;34m"
+#define MAGENTA_B "\033[1;35m"
+#define CYAN_B "\033[1;36m"
+#define WHITE_B "\033[1;37m"
+#define BLACK_BG "\033[40m"
+#define RED_BG "\033[41m"
+#define GREEN_BG "\033[42m"
+#define YELLOW_BG "\033[43m"
+#define BLUE_BG "\033[44m"
+
+
 typedef struct {
   char numero; // 1 a 13
   int palo;  // 0-3 (0 es Corazones, 1 es Diamantes, 2 es Tréboles, 3 es Picas)
@@ -389,6 +413,68 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
   }
   printf("\n\n");
 }
+
+void mostrar_cartas_dos(Carta *cartas, int cantidad){
+
+  printf(BLUE".-------.-------.-------.-------.-------.-------.-------.-------.\n"RESET);
+
+  // Línea 1
+  for (int i = 0 ; i < cantidad; i++) {
+    printf(BLUE"|"RESET);
+    printf("%-2s  ", numero_to_char(cartas[i].numero));
+    if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦"){
+      printf(RED"%-2s  "RESET, palo_to_char(cartas[i].palo));
+    }
+    else if (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣"){
+      printf(BLACK"%-2s  "RESET, palo_to_char(cartas[i].palo));
+    }
+  }
+  printf(BLUE"|\n"RESET);
+  // Línea 2
+  for (int i = 0 ; i < cantidad ; i++) {
+    printf(BLUE"|"RESET);
+      if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦"){
+        printf(RED"   %s%s  "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+      }
+    else if (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣"){
+        printf(BLACK"   %s%s  "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+    }
+  }
+  printf(BLUE"|\n"RESET);
+
+  // Línea 3
+  for (int i = 0 ; i < cantidad ; i++) {
+    printf(BLUE"|"RESET);
+    if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦"){
+      printf(RED"  %s%s   "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+    }
+    else if (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣"){
+      printf(BLACK"  %s%s   "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+    }
+  }
+  printf(BLUE"|\n"RESET);
+
+  // Línea 4
+  for (int i = 0 ; i < cantidad ; i++) {
+    printf(BLUE"|"RESET);
+    if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦")
+      printf(RED"  %s  "RESET, palo_to_char(cartas[i].palo));
+
+    else if  (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣")
+      printf(BLACK"  %s  "RESET, palo_to_char(cartas[i].palo));
+
+    printf("%-2s", numero_to_char(cartas[i].numero));
+  }
+  printf(BLUE"|\n"RESET);
+
+  printf(BLUE"`-------^-------^-------^-------^-------^-------^-------^-------´\n"RESET);
+  for (int i = 1 ; i <= cantidad ; i++){
+      if (i == 1)printf("%5d", i);
+      else printf("%8d", i);
+  }
+  printf("\n\n");
+}
+
 
 // ============================================================
 // ========================== JOKERS ==========================
