@@ -399,9 +399,7 @@ void mensajeVictoria(){
   puts("         ♠♣♦♥  VICTORIA  ♥♦♣♠");
   puts("====================================");
   mostrarChancho();
-  puts("\nPresione para continuar al siguiente nivel...");
-  getchar();
-  limpiarPantalla();
+  puts("\nDesea continuar al siguiente nivel? (s/n)");
 }
 void mensajeFinal(){
   puts("==========================================================");
