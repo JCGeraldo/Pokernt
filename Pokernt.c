@@ -571,7 +571,7 @@ void seleccionarDificultad(float *factor, Nivel* nivel){
 }
 
 
-// ==================== OPCIÓN 4 ====================
+// ==================== OPCIÓN 5 ====================
 
 bool comodinValido(char *cadena, int *ptrOpcion) {
   for (int i = 0 ; cadena[i] != '\0' ; i++) {
@@ -703,6 +703,7 @@ int main() {
         seleccionarDificultad(&factor, &nivel);
         break;
       case '5':
+        limpiarPantalla();
         seleccionarComodin(jugador);
         break;
       case '6':
