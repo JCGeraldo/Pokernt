@@ -85,7 +85,7 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 void  mostrarMano(Jugador jugador, int majosJugadas, int contadorDescartes) { 
   char *jugadas = {"Jugadas:"};
   char *descartes = {"Descartes:"};
-  printf("%49s %d / 5\n\n", jugadas, majosJugadas);
+  printf("%42s %d / 5\n\n", jugadas, majosJugadas);
   printf("Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
   mostrar_cartas(jugador.cartas, 8);
 }
@@ -395,6 +395,7 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
     //Eleccion de cartas.
     do{
       printf("Puntaje = %-30d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
+      printf("Nivel %d" , nivel.etapa);
       mostrarMano(jugador, manosJugadas, contadorDescartes);
       puts("============================================================\n");
       puts("Elija una opcion: ");
@@ -504,7 +505,33 @@ void mostrar_tutorial(Jugador jugador_tutorial) {
 }
 
 // ==================== OPCIÓN 3 ====================
-
+float seleccionarDificultad(){
+  limpiarPantalla();
+  mostrarTitulo();
+  puts("\nSeleccione la dificultad del juego:");
+  puts("1. Fácil");
+  puts("2. Medio");
+  puts("3. Difícil");
+  puts("4. Imposible");
+  int opcion;
+  do{
+    printf("Ingrese una opción (1 - 4): ");
+    if(!scanf("%d", &opcion) || opcion < 1 || opcion > 4){
+      puts("Ingrese una opción válida !!");
+      limpiarBuffer();
+    }
+  }while(opcion < 1 || opcion > 4);
+  switch (opcion){
+    case 1:
+      return 1.2;
+    case 2:
+      return 1.5;
+    case 3:
+      return 1.8;
+    case 4:
+      return 2.4;
+  }
+}
 
 
 // ==================== OPCIÓN 4 ====================
@@ -569,7 +596,8 @@ int main() {
   puts("\nPresione una tecla para jugar...");
   getchar();
   limpiarPantalla();
-  
+
+  float factor = 1.5;
   Jugador jugador;  
   char opcion;
   bool derrota = false;
@@ -590,7 +618,7 @@ int main() {
           derrota = jugar(jugador, nivel, mapa); 
           if(derrota) break;
           nivel.etapa++;
-          nivel.pozo *= 1.5;
+          nivel.pozo *= factor;
           limpiarPantalla();
           mensajeVictoria();
         } while(!derrota);
@@ -601,6 +629,7 @@ int main() {
         mostrar_tutorial(jugador_tutorial);
         break;
       case '3':
+        factor = seleccionarDificultad();
         break;
       case '4':
         limpiarPantalla();
