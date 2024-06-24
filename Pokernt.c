@@ -578,12 +578,13 @@ void seleccionarDificultad(float *factor, Nivel* nivel){
 // ==================== OPCIÓN 5 ====================
 
 bool comodinValido(char *cadena, int *ptrOpcion) {
+  if (strcmp(cadena, "n") == 0 || strcmp(cadena, "N") == 0) return true;
   for (int i = 0 ; cadena[i] != '\0' ; i++) {
-    if (!isdigit(cadena[i])) return 0;
+    if (!isdigit(cadena[i])) return false;
   }
   *ptrOpcion = atoi(cadena);
-  if (*ptrOpcion < 0 || *ptrOpcion > 3) return 0;
-  return 1;
+  if (*ptrOpcion < 0 || *ptrOpcion > 3) return false;
+  return true;
 }
 
 void seleccionarComodin(Jugador *jugador) {
@@ -596,21 +597,27 @@ void seleccionarComodin(Jugador *jugador) {
   printf("\n3. Joker C\n");
   printf("\n\nIngrese el número del comodín que desea ver:\n");
   printf("Para salir ingrese 0\n");
+  printf("Para quitar comodin ingrese 'N'\n");
 
   scanf(" %[^\n]s", opcionAux);
   if (comodinValido(opcionAux, &opcion)) {
-    switch (opcion) {
-      case 0:
-        return;
-      case 1:
-        joker1(jugador);
-        break;
-      case 2:
-        joker2(jugador);
-        break;
-      case 3:
-        joker3(jugador);
-        break;
+    if (strcmp(opcionAux, "n") == 0 || strcmp(opcionAux, "N") == 0) {
+      jugador->comodin = 0;
+      printf("\nHas desequipado el comodín.\n\n");
+    } else {
+      switch (opcion) {
+        case 0:
+          return;
+        case 1:
+          joker1(jugador);
+          break;
+        case 2:
+          joker2(jugador);
+          break;
+        case 3:
+          joker3(jugador);
+          break;
+      }
     }
   } else {
     puts("Opción inválida. Intente nuevamente.");
