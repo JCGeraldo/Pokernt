@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include <time.h>
 #include "tdas/extra.h"
 #include "tdas/list.h"
@@ -10,12 +11,6 @@
 #include "tdas/queue.h"
 #include "tdas/map.h"
 #include "cartas.c"
-
-typedef struct {
-  Carta cartas[8]; // Cartas que tiene el jugador
-  int puntaje; // Puntaje del jugador
-  int comodin;
-} Jugador;
 
 typedef struct {
   int etapa; // Nivel de juego
@@ -446,7 +441,7 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
             descartarCartas(&jugador, mazoBarajado, &contadorDescartes);
           }
           limpiarPantalla();
-        break;
+          break;
         default:
           puts("Ingrese una opción válida: ");
           break;
@@ -508,17 +503,51 @@ void mostrar_tutorial(Jugador jugador_tutorial) {
   mensajeEstrategias();
 }
 
-
 // ==================== OPCIÓN 3 ====================
 
 
 
 // ==================== OPCIÓN 4 ====================
 
-void seleccionarComodin(Jugador jugador) {
-  
+bool comodinValido(char *cadena, int *ptrOpcion) {
+  for (int i = 0 ; cadena[i] != '\0' ; i++) {
+    if (!isdigit(cadena[i])) return 0;
+  }
+  *ptrOpcion = atoi(cadena);
+  if (*ptrOpcion < 0 || *ptrOpcion > 3) return 0;
+  return 1;
 }
 
+void seleccionarComodin(Jugador jugador) {
+  char opcionAux[50];
+  int opcion;
+
+  printf("\n=============== Listado de Comodines: ===============\n\n");
+  printf("\n1. Joker A\n");
+  printf("\n2. Joker B\n");
+  printf("\n3. Joker C\n");
+  printf("\n\nIngrese el número del comodín que desea ver:\n");
+  printf("Para salir ingrese 0\n");
+
+  scanf(" %[^\n]s", opcionAux);
+  if (comodinValido(opcionAux, &opcion)) {
+    switch (opcion) {
+      case 0:
+        return;
+      case 1:
+        joker1(jugador);
+        break;
+      case 2:
+        joker2(jugador);
+        break;
+      case 3:
+        joker3(jugador);
+        break;
+    }
+  } else {
+    puts("Opción inválida. Intente nuevamente.");
+  }
+}
 
 // ==================== MAIN ====================
 
@@ -574,6 +603,7 @@ int main() {
       case '3':
         break;
       case '4':
+        limpiarPantalla();
         seleccionarComodin(jugador);
         break;
       case '5':
