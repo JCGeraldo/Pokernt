@@ -45,6 +45,23 @@ const char* numero_to_char(char numero) {
   }
 }
 
+void mostrarComodin(Jugador jugador) {
+  switch(jugador.comodin) {
+    case 1:
+      printf("Sir Jester, the Knight of Misrule\n");
+      break;
+    case 2:
+      printf("Joker B\n");
+      break;
+    case 3:
+      printf("Joker C\n");
+      break;
+    default:
+      printf("!Sin comodin activo!\n");
+      break;
+  }
+}
+
 void linea1(Carta *cartas, int cantidad) {
   printf(".-------.-------.-------.-------.-------.-------.-------.-------.\n");
   for (int i = 0 ; i < cantidad; i++) {
@@ -52,11 +69,11 @@ void linea1(Carta *cartas, int cantidad) {
       if (cartas[i].palo == 0) {
         printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
       } else if (cartas[i].palo == 1) {
-        printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+        printf("|%s%-2s ∧   ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
       } else if (cartas[i].palo == 2) {
-        printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+        printf("|%s%-2s _   ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
       } else {
-        printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+        printf("|%s%-2s .   ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
       }
     } else if (cartas[i].numero == 10) {
       printf("|%s%-2s  %s ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo) , palo_to_char(cartas[i].palo));
@@ -170,7 +187,7 @@ void linea3(Carta *cartas, int cantidad) {
     char *figura = palo_to_char(cartas[i].palo);
     if (cartas[i].numero == 1) {
       if (cartas[i].palo == 0) {
-        printf("| \\   / ");
+        printf("| \\ ˇ / ");
       } else if (cartas[i].palo == 1) {
         printf("| (   ) ");
       } else if (cartas[i].palo == 2) {
@@ -303,13 +320,43 @@ void linea4(Carta *cartas, int cantidad) {
 
 void linea5(Carta *cartas, int cantidad) {
   for (int i = 0 ; i < cantidad ; i++) {
-    if (cartas[i].numero == 10) {
-      printf("| %s  %s%s", palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
-    } else if (cartas[i].numero == 1) {
+    if (cartas[i].numero == 1) {
       if (cartas[i].palo == 0) {
         printf("|   ˇ %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
       } else if (cartas[i].palo == 1) {
         printf("|   v %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else if (cartas[i].palo == 2) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      }
+    } else if (cartas[i].numero == 10) {
+      printf("| %s  %s%s", palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+    } else if (cartas[i].numero == 11) {
+      if (cartas[i].palo == 0) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else if (cartas[i].palo == 1) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else if (cartas[i].palo == 2) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      }
+    } else if (cartas[i].numero == 12) {
+      if (cartas[i].palo == 0) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else if (cartas[i].palo == 1) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else if (cartas[i].palo == 2) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      }
+    } else if (cartas[i].numero == 13) {
+      if (cartas[i].palo == 0) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      } else if (cartas[i].palo == 1) {
+        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
       } else if (cartas[i].palo == 2) {
         printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
       } else {
@@ -337,7 +384,7 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
   linea5(cartas, cantidad);
     
   for (int i = 1 ; i <= cantidad ; i++){
-    if (i == 1)printf("%5d", i);
+    if (i == 1) printf("%5d", i);
     else printf("%8d", i);
   }
   printf("\n\n");
@@ -349,8 +396,51 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
 
 void joker1(Jugador jugador) {
   limpiarPantalla();
+  printf("\n");
+  printf("================= Sir Jester, the Knight of Misrule =================\n\n");
+  printf("En la era moderna, tener a Sir Jester activo otorga un total de 99 puntos\n");
+  printf("adicionales, recordando siempre que la alegría y el valor pueden cambiar el\n");
+  printf("destino, tal como lo hizo el caballero del desorden en tiempos antiguos.\n\n");
+
+  printf("                  ____________________________\n");
+  printf("                  |                          |\n");
+  printf("                  |   ,^.                    |\n");
+  printf("                  |   |||                    |\n");
+  printf("                  |   |||       _T_          |\n");
+  printf("                  |   |||   .-.[:|:].-.      |\n");
+  printf("                  |   ===_ /\\|  '\"'  |/      |\n");
+  printf("                  |    E]_|\\/ \\--|-|'''''|   |\n");
+  printf("                  |    O  `'  '=[:]| A   |   |\n");
+  printf("                  |           /\"\"\"\"|   P |   |\n");
+  printf("                  |          /\"\"\"\"\".`.__.'   |\n");
+  printf("                  |         []\"/\"\"\\[]        |\n");
+  printf("                  |         | \\     / |      |\n");
+  printf("                  |         | |     | |      |\n");
+  printf("                  |       <\\\\\\)     (///>    |\n");
+  printf("                  |                          |\n");
+  printf("                  |__________________________|\n\n");
+
+  // CONDICIÓN LOGICA PARA PREGUNTAR SI ESTÁ DESBLOQUEADO O NO:
+  printf("\nPara desbloquear a Sir Jester, el Caballero del Desorden...\n");
+
+  char opcion[50];
+  printf("\n¿Desea activar a Sir Jester? (S/N): ");
+  scanf(" %[^\n]s", opcion);
+  if (strcmp(opcion, "S") == 0 || strcmp(opcion, "s") == 0) {
+    printf("¡Has activado a Sir Jester!\n");
+    jugador.comodin = 1;
+  } else if (strcmp(opcion, "N") == 0 || strcmp(opcion, "n") == 0) {
+    presioneTeclaParaContinuar();
+  } else {
+    printf("\nOpción inválida.\n");
+  }
+  printf("\n");
+}
+
+void joker2(Jugador jugador) {
+  limpiarPantalla();
   printf("\n\n");
-  printf("================= JOKER A =================\n");
+  printf("================= JOKER B =================\n");
 
   Jugador cartasAs = {
       .cartas = {
@@ -361,9 +451,6 @@ void joker1(Jugador jugador) {
       .comodin = 0
   };
   mostrar_cartas(cartasAs.cartas, 8);
-}
-
-void joker2(Jugador jugador) {
   
 }
 

@@ -393,11 +393,12 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
     int cont = 0;
 
     //Eleccion de cartas.
-    do{
-      printf("Puntaje = %-30d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
+    do {
+      mostrarComodin(jugador);
+      printf("\nPuntaje = %-30d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
       printf("Nivel %d" , nivel.etapa);
       mostrarMano(jugador, manosJugadas, contadorDescartes);
-      puts("============================================================\n");
+      puts("==============================================================\n");
       puts("Elija una opcion: ");
       puts("  1) Elegir cartas");
       puts("  2) Ordenar mano por palo");
@@ -407,7 +408,7 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
       }
 
       scanf(" %c", &opcion);
-      switch(opcion){
+      switch(opcion) {
         case '1':
           printf("Ingrese el número de la carta que desea jugar (1-8): ");
           do{
@@ -427,7 +428,7 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
               cont++;
             }
             else printf("La carta ya fue elegida, ingrese otra: ");
-          }while(cont < 5);
+          } while(cont < 5);
           break;
         case '2':
           ordenarCartasPalo(jugador.cartas, 8);
@@ -447,7 +448,7 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
           puts("Ingrese una opción válida: ");
           break;
       }
-    }while(opcion != '1' && opcion != '2' && opcion != '3' && opcion != '4');
+    } while(opcion != '1' && opcion != '2' && opcion != '3' && opcion != '4');
 
     if (opcion == '4') continue;
     if(cont == 0)continue;
@@ -586,7 +587,7 @@ void seleccionarComodin(Jugador jugador) {
   int opcion;
 
   printf("\n=============== Listado de Comodines: ===============\n\n");
-  printf("\n1. Joker A\n");
+  printf("\n1. Sir Jester, the Knight of Misrule\n");
   printf("\n2. Joker B\n");
   printf("\n3. Joker C\n");
   printf("\n\nIngrese el número del comodín que desea ver:\n");
@@ -626,6 +627,7 @@ int main() {
       .puntaje = 0,
       .comodin = 0
   };
+  
   FILE *archivo = NULL;
   
   mostrarTitulo();
