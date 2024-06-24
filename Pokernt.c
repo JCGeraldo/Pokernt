@@ -480,6 +480,28 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
   return true;
 }
 
+void guardarPartida(Nivel nivel, float factor){
+  FILE *archivo;
+  archivo = fopen("SaveFile.txt", "w");
+  if (archivo == NULL) {
+    puts("Error al abrir el archivo");
+    return;
+  }
+  fprintf(archivo, "%d, %d, %f", nivel.etapa, nivel.pozo, factor);
+  fclose(archivo);
+  puts("Partida guardada");
+}
+
+void reiniciarGuardado(Nivel *nivel, float factor){
+  printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel->etapa);
+  nivel->etapa = 1;
+  nivel->pozo = 100;
+  FILE *archivo;
+  archivo = fopen("SaveFile.txt", "w");
+  if (archivo == NULL) return;
+  fprintf(archivo, "%d, %d, %f", 1, 100, factor);   
+  fclose(archivo);
+}
 // ==================== OPCIÓN 2 ====================
 
 void mostrar_tutorial(Jugador jugador_tutorial) {
@@ -505,32 +527,46 @@ void mostrar_tutorial(Jugador jugador_tutorial) {
 }
 
 // ==================== OPCIÓN 3 ====================
-float seleccionarDificultad(){
+void seleccionarDificultad(float *factor, Nivel* nivel){
   limpiarPantalla();
   mostrarTitulo();
+  puts("\nSeleccionar una nueva dificultad lo obligará a comenzar en el nivel 1");
   puts("\nSeleccione la dificultad del juego:");
   puts("1. Fácil");
   puts("2. Medio");
   puts("3. Difícil");
   puts("4. Imposible");
+  puts("5. Volver al menú principal");
   int opcion;
+  float temp;
   do{
-    printf("Ingrese una opción (1 - 4): ");
-    if(!scanf("%d", &opcion) || opcion < 1 || opcion > 4){
+    printf("Ingrese una opción (1 - 5): ");
+    if(!scanf("%d", &opcion) || opcion < 1 || opcion > 5){
       puts("Ingrese una opción válida !!");
       limpiarBuffer();
     }
   }while(opcion < 1 || opcion > 4);
   switch (opcion){
     case 1:
-      return 1.2;
+      temp = 1.2;
+      break;
     case 2:
-      return 1.5;
+      temp = 1.5;
+      break;
     case 3:
-      return 1.8;
+      temp = 1.8;
+      break;
     case 4:
-      return 2.4;
+      temp = 2.4;
+      break;
+    case 5:
+      return;
   }
+  if(*factor != temp){
+    nivel->etapa = 1;
+    nivel->pozo = 100;
+  } 
+  *factor = temp;
 }
 
 
@@ -579,6 +615,7 @@ void seleccionarComodin(Jugador jugador) {
 // ==================== MAIN ====================
 
 int main() {
+
   Map *mapa = map_create(is_equal);
   inicializarMapa(mapa);
   Jugador jugador_tutorial = {
@@ -589,7 +626,7 @@ int main() {
       .puntaje = 0,
       .comodin = 0
   };
-
+  FILE *archivo = NULL;
   
   mostrarTitulo();
   mostrarChancho();
@@ -598,18 +635,20 @@ int main() {
   limpiarPantalla();
 
   float factor = 1.5;
+  Nivel nivel;
+  nivel.etapa = 1;
+  nivel.pozo = 100;
   Jugador jugador;  
   char opcion;
   bool derrota = false;
   do {
-      Nivel nivel;
-      nivel.etapa = 1;
-      nivel.pozo = 100;
+     
       puts("1) Jugar");
-      puts("2) Tutorial");
-      puts("3) Configuración");
-      puts("4) Comodín");
-      puts("5) Salir");
+      puts("2) Cargar Partida");
+      puts("3) Tutorial");
+      puts("4) Configuración");
+      puts("5) Comodín");
+      puts("6) Salir");
       printf("Ingrese su opción: ");
       scanf(" %c", &opcion);
       switch (opcion) {
@@ -621,21 +660,50 @@ int main() {
           nivel.pozo *= factor;
           limpiarPantalla();
           mensajeVictoria();
+          char opcion2 = getchar();
+          if(opcion2 == 'n'){
+            puts("Desea guardar la partida? (s/n)");
+            char opcion3;
+            scanf(" %c", &opcion3);
+            if(opcion3 == 's')
+              guardarPartida(nivel, factor);
+            nivel.etapa = 1;
+            nivel.pozo = 100;
+            break;
+          }
         } while(!derrota);
-        mensajeFinal();
-        printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel.etapa);
+        if(derrota){
+          mensajeFinal();
+          reiniciarGuardado(&nivel, factor);       
+        }
         break;
       case '2':
-        mostrar_tutorial(jugador_tutorial);
+        // Cargar partida
+        archivo = fopen("SaveFile.txt", "r");
+        if (archivo == NULL){
+          puts("No se pudo abrir el archivo");
+          break;
+        }
+        fscanf(archivo, "%d, %d, %f", &nivel.etapa, &nivel.pozo, &factor);
+        fclose(archivo);
+        if(nivel.etapa == 1){
+          puts("No hay partida en curso");
+          break;
+        }
+        puts("Partida cargada exitosamente.");
+        puts("Seleccione la opción 1 para continuar su partida.");
         break;
       case '3':
-        factor = seleccionarDificultad();
+        mostrar_tutorial(jugador_tutorial);
         break;
       case '4':
         limpiarPantalla();
-        seleccionarComodin(jugador);
+        seleccionarDificultad(&factor, &nivel);
         break;
       case '5':
+        seleccionarComodin(jugador);
+        break;
+      case '6':
          printf("\nSaliendo del juego.\n");
          break;
       default:
@@ -644,7 +712,7 @@ int main() {
       presioneTeclaParaContinuar();
       limpiarPantalla();
 
-  } while (opcion != '5');
+  } while (opcion != '6');
 
   return 0;
 }
