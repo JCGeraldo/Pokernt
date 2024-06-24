@@ -394,7 +394,7 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
 // ========================== JOKERS ==========================
 // ============================================================
 
-void joker1(Jugador jugador) {
+void joker1(Jugador *jugador) {
   limpiarPantalla();
   printf("\n");
   printf("================= Sir Jester, the Knight of Misrule =================\n\n");
@@ -428,7 +428,7 @@ void joker1(Jugador jugador) {
   scanf(" %[^\n]s", opcion);
   if (strcmp(opcion, "S") == 0 || strcmp(opcion, "s") == 0) {
     printf("¡Has activado a Sir Jester!\n");
-    jugador.comodin = 1;
+    jugador->comodin = 1;
   } else if (strcmp(opcion, "N") == 0 || strcmp(opcion, "n") == 0) {
     presioneTeclaParaContinuar();
   } else {
@@ -437,7 +437,7 @@ void joker1(Jugador jugador) {
   printf("\n");
 }
 
-void joker2(Jugador jugador) {
+void joker2(Jugador *jugador) {
   limpiarPantalla();
   printf("\n\n");
   printf("================= JOKER B =================\n");
@@ -454,7 +454,7 @@ void joker2(Jugador jugador) {
   
 }
 
-void joker3(Jugador jugador) {
+void joker3(Jugador *jugador) {
   
 }
 

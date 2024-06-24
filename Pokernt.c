@@ -384,7 +384,11 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
   Stack *mazoBarajado = stack_create(mazoBarajado); // Barajar el mazo
   barajarMazo(mazo, 52, mazoBarajado);
 
-  jugador.puntaje = 0;
+  if (jugador.comodin == 1) {
+    jugador.puntaje = 99;
+  } else {
+    jugador.puntaje = 0;
+  }
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
   // Pedir cartas al jugador
   int carta;
@@ -582,7 +586,7 @@ bool comodinValido(char *cadena, int *ptrOpcion) {
   return 1;
 }
 
-void seleccionarComodin(Jugador jugador) {
+void seleccionarComodin(Jugador *jugador) {
   char opcionAux[50];
   int opcion;
 
@@ -641,6 +645,7 @@ int main() {
   nivel.etapa = 1;
   nivel.pozo = 100;
   Jugador jugador;  
+  jugador.comodin = 0;
   char opcion;
   bool derrota = false;
   do {
@@ -688,7 +693,7 @@ int main() {
         }
         fscanf(archivo, "%d, %d, %f", &nivel.etapa, &nivel.pozo, &factor);
         fclose(archivo);
-        if(nivel.etapa == 1){
+        if(nivel.etapa == 1) {
           puts("No hay partida en curso");
           break;
         }
@@ -704,7 +709,7 @@ int main() {
         break;
       case '5':
         limpiarPantalla();
-        seleccionarComodin(jugador);
+        seleccionarComodin(&jugador);
         break;
       case '6':
          printf("\nSaliendo del juego.\n");
