@@ -487,17 +487,24 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
 // ==================== OPCIÓN 2 ====================
 
 void mostrar_tutorial(Jugador jugador_tutorial) {
-  printf("Bienvenido al juego de cartas!\n\n");
+  limpiarPantalla();
+  mostrarTitulo();
+  printf("Bienvenido al juego de cartas Pokern't!\n\n");
 
   printf("Objetivo del juego:\n");
   printf("El objetivo es ganar puntos formando combinaciones de cartas.\n\n");
-  printf("...");
 
   presioneTeclaParaContinuar();
   printf("Mecánicas Básicas del Juego:\n");
-  printf("1. Cada jugador recibe 8 cartas.\n");
+  printf("1. Recibes 8 cartas del mazo.\n");
   printf("2. Las cartas tienen un número (1 a 13) y un palo (Corazones, Diamantes, Tréboles, Picas).\n\n");
   mostrar_cartas(jugador_tutorial.cartas, 8);
+  puts("3. Puedes elegir hasta 5 cartas para jugar.");
+  puts("4. Cada jugada suma puntos basados en las cartas elegidas y la combinación que forman.");
+  puts("5. Puedes descartar cartas para obtener nuevas cartas.");
+  puts("6. Ganas cuando alcanzas el puntaje objetivo, indicado como pozo");
+  puts("7. Pierdes si se agotan las jugadas y no logras alcanzar el pozo");
+  getchar();
   mensajeEstrategias();
 }
 
@@ -527,10 +534,8 @@ int main() {
       .comodin = 0
   };
 
-  puts("\n========================================");
-  puts("         ♠♣♦♥  Pokern't  ♥♦♣♠");
-  puts("========================================");
-
+  
+  mostrarTitulo();
   mostrarChancho();
   puts("\nPresione una tecla para jugar...");
   getchar();
@@ -559,7 +564,6 @@ int main() {
           nivel.pozo *= 1.5;
           limpiarPantalla();
           mensajeVictoria();
-          
         } while(!derrota);
         mensajeFinal();
         printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel.etapa);

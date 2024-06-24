@@ -187,6 +187,12 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
   printf("\n\n");
 }
 
+void mostrarTitulo(){
+  puts("========================================");
+  puts("         ♠♣♦♥  Pokern't  ♥♦♣♠");
+  puts("========================================\n");
+}
+
 void mostrarChancho(){
   printf("          ───▄█▄▄▄▄▄▄▄───▄──\n");
   printf("          ──█▀██▀▄▄▀███▄▐─▌─\n");
@@ -215,18 +221,45 @@ void mensajeFinal(){
 
 void mensajeEstrategias(){
   printf("Controles Básicos:\n");
-  printf("1. Selecciona una carta para jugar.\n");
-  printf("2. Juega una carta seleccionada para formar combinaciones.\n");
-  printf("3. Pasa el turno cuando no puedes jugar una carta.\n\n");
+  printf("1. Selecciona hasta 5 cartas para jugar.\n");
+  printf("2. Ordena tu mano por valores o por palo. Así es más fácil ver las combinaciones!\n");
+  printf("3. Descarta cartas de tu mano que no te sirvan ahora.\n\n");
 
-  printf("Interfaz de Usuario:\n");
+  limpiarPantalla();
+  printf("Mesa de Juego:\n");
+
+  puts("============================================================\n");
+  puts("Puntaje = 0                              Pozo = 100\n\n");
+  puts("                                         Jugadas: 0 / 5\n");
+  puts("Mano:                                    Descartes: 0 / 3\n");
+  puts(".-------.-------.-------.-------.-------.-------.-------.-------.");
+  puts("|7♠     |5♥     |6♦     |6♠     |Q♥     |9♦     |10♣  ♣ |8♦     |");
+  puts("|  ♠ ♠  |  ♥ ♥  |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ | ♣ ♣ ♣ | ♦ ♦ ♦ |");
+  puts("| ♠ ♠ ♠ |   ♥   |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ |  ♣ ♣  |  ♦ ♦  |");
+  puts("|  ♠ ♠  |  ♥ ♥  |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ | ♣ ♣ ♣ | ♦ ♦ ♦ |");
+  puts("|     ♠7|     ♥5|     ♦6|     ♠6|     ♥Q|     ♦9| ♣  ♣10|     ♦8|");
+  puts("`-------^-------^-------^-------^-------^-------^-------^-------´");
+  puts("    1       2       3       4       5       6       7       8");
+
+  puts("============================================================\n");
+
+  puts("Elija una opcion: ");
+  puts("  1) Elegir cartas");
+  puts("  2) Ordenar mano por palo");
+  puts("  3) Ordenar mano por valor");
+  puts("  4) Descartar cartas\n\n");
+  puts("============================================================\n\n");
+
   printf("1. La mano del jugador muestra las cartas que tienes.\n");
-  printf("2. La mesa de juego muestra las cartas jugadas.\n");
-  printf("3. Los puntajes muestran cuántos puntos tiene cada jugador.\n\n");
+  printf("2. La mesa de juego muestra cuantas jugadas y descartes te quedan.\n");
+  printf("3. Puntaje muestra cuántos puntos has acumulado en el nivel actual.\n");
+  puts("4. El pozo indica tu meta de puntaje.\n");
+  getchar();
 
   printf("Estrategia Básica:\n");
   printf("1. Intenta formar combinaciones ganadoras como pares o tríos.\n");
-  printf("2. Prioriza cartas altas para ganar más puntos.\n\n");
+  printf("2. Prioriza cartas altas para ganar más puntos.\n");
+  puts("3. Tienes jugadas limitadas. Haz que cuenten!\n");
 
   printf("¡Buena suerte y diviértete jugando!\n");
 }
