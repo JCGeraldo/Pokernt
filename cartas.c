@@ -55,7 +55,7 @@ char* palo_to_char(int palo) {
   }
 }
 
-const char* numero_to_char(char numero) {
+char* numero_to_char(char numero) {
   switch(numero) {
     case 1: return "A";
     case 11: return "J";
@@ -89,50 +89,52 @@ void mostrarComodin(Jugador jugador) {
 void linea1(Carta *cartas, int cantidad) {
   printf(".-------.-------.-------.-------.-------.-------.-------.-------.\n");
   for (int i = 0 ; i < cantidad; i++) {
+    char *figura = palo_to_char(cartas[i].palo);
+    char *numero = numero_to_char(cartas[i].numero);
     if (cartas[i].numero == 1) {
       if (cartas[i].palo == 0) {
-        printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+        printf("|%s%-2s     ", numero, figura);
       } else if (cartas[i].palo == 1) {
-        printf("|%s%-2s ∧   ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+        printf("|%s%-2s ∧   ", numero, figura);
       } else if (cartas[i].palo == 2) {
-        printf("|%s%-2s _   ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+        printf("|%s%-2s _   ", numero, figura);
       } else {
-        printf("|%s%-2s .   ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+        printf("|%s%-2s .   ", numero, figura);
       }
     } else if (cartas[i].numero == 10) {
-      printf("|%s%-2s  %s ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo) , palo_to_char(cartas[i].palo));
+      printf("|%s%-2s  %s ", numero, figura , figura);
     } else if (cartas[i].numero == 11) {
       if (cartas[i].palo == 0) {
-        printf("|%s /~|_ ", numero_to_char(cartas[i].numero));
+        printf("|%s /~|_ ", numero);
       } else if (cartas[i].palo == 1) {
-        printf("|%s |≡\\_ ", numero_to_char(cartas[i].numero));
+        printf("|%s |≡\\_ ", numero);
       } else if (cartas[i].palo == 2) {
-        printf("|%s (-)_ ", numero_to_char(cartas[i].numero));
+        printf("|%s (-)_ ", numero);
       } else {
-        printf("|%s {╬}_ ", numero_to_char(cartas[i].numero));
+        printf("|%s {╬}_ ", numero);
       }
     } else if (cartas[i].numero == 12) {
       if (cartas[i].palo == 0) {
-        printf("|%s |~~~|", numero_to_char(cartas[i].numero));
+        printf("|%s |~~~|", numero);
       } else if (cartas[i].palo == 1) {
-        printf("|%s |≡≡≡|", numero_to_char(cartas[i].numero));
+        printf("|%s |≡≡≡|", numero);
       } else if (cartas[i].palo == 2) {
-        printf("|%s (---)", numero_to_char(cartas[i].numero));
+        printf("|%s (---)", numero);
       } else {
-        printf("|%s {║║║}", numero_to_char(cartas[i].numero));
+        printf("|%s {║║║}", numero);
       }
     } else if (cartas[i].numero == 13) {
       if (cartas[i].palo == 0) {
-        printf("|%s |%%°%%|", numero_to_char(cartas[i].numero));
+        printf("|%s |%%°%%|", numero);
       } else if (cartas[i].palo == 1) {
-        printf("|%s /\\|/\\", numero_to_char(cartas[i].numero));
+        printf("|%s /\\|/\\", numero);
       } else if (cartas[i].palo == 2) {
-        printf("|%s ()·()", numero_to_char(cartas[i].numero));
+        printf("|%s ()·()", numero);
       } else {
-        printf("|%s [╠╦╣]", numero_to_char(cartas[i].numero));
+        printf("|%s [╠╦╣]", numero);
       }
     } else {
-      printf("|%s%-2s     ", numero_to_char(cartas[i].numero), palo_to_char(cartas[i].palo));
+      printf("|%s%-2s     ", numero, figura);
     }
   }
   printf("|\n");
@@ -344,50 +346,52 @@ void linea4(Carta *cartas, int cantidad) {
 
 void linea5(Carta *cartas, int cantidad) {
   for (int i = 0 ; i < cantidad ; i++) {
+    char *figura = palo_to_char(cartas[i].palo);
+    char *numero = numero_to_char(cartas[i].numero);
     if (cartas[i].numero == 1) {
       if (cartas[i].palo == 0) {
-        printf("|   ˇ %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|   ˇ %s%s", figura, numero);
       } else if (cartas[i].palo == 1) {
-        printf("|   v %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|   v %s%s", figura, numero);
       } else if (cartas[i].palo == 2) {
-        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|     %s%s", figura, numero);
       } else {
-        printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|     %s%s", figura, numero);
       }
     } else if (cartas[i].numero == 10) {
-      printf("| %s  %s%s", palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      printf("| %s  %s%s", figura, figura, numero);
     } else if (cartas[i].numero == 11) {
       if (cartas[i].palo == 0) {
-        printf("|  _> %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|  _> %s%s", figura, numero);
       } else if (cartas[i].palo == 1) {
-        printf("| l\\I %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("| l\\I %s%s", figura, numero);
       } else if (cartas[i].palo == 2) {
-        printf("|  |- %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|  |- %s%s", figura, numero);
       } else {
-        printf("| I-\\ %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("| I-\\ %s%s", figura, numero);
       }
     } else if (cartas[i].numero == 12) {
       if (cartas[i].palo == 0) {
-        printf("| /~o %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("| /~o %s%s", figura, numero);
       } else if (cartas[i].palo == 1) {
-        printf("|  /^ %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|  /^ %s%s", figura, numero);
       } else if (cartas[i].palo == 2) {
-        printf("| /~- %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("| /~- %s%s", figura, numero);
       } else {
-        printf("|  |- %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|  |- %s%s", figura, numero);
       }
     } else if (cartas[i].numero == 13) {
       if (cartas[i].palo == 0) {
-        printf("| |~o %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("| |~o %s%s", figura, numero);
       } else if (cartas[i].palo == 1) {
-        printf("|  (^ %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|  (^ %s%s", figura, numero);
       } else if (cartas[i].palo == 2) {
-        printf("| /~+ %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("| /~+ %s%s", figura, numero);
       } else {
-        printf("|  ¦─ %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+        printf("|  ¦─ %s%s", figura, numero);
       }
     } else {
-      printf("|     %s%s", palo_to_char(cartas[i].palo), numero_to_char(cartas[i].numero));
+      printf("|     %s%s", figura, numero);
     }
   }
   printf("|\n");
