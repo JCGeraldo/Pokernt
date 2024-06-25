@@ -89,10 +89,14 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 void  mostrarMano(Jugador jugador, int manosJugadas, int contadorDescartes, int estiloMazo) { 
   char *jugadas = {"Jugadas:"};
   char *descartes = {"Descartes:"};
-  if (jugador.comodin == 2) printf("%42s %d / 7\n\n", jugadas, manosJugadas); // COMODÍN 2
-  else printf("%42s %d / 5\n\n", jugadas, manosJugadas);
-  
-  printf("  Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
+  if (jugador.comodin == 2){ 
+    printf("%42s %d / 7\n\n", jugadas, manosJugadas);
+    printf("  Mano: %45s %d / 2\n\n", descartes, contadorDescartes);// COMODÍN 2
+  }
+  else {
+    printf("%42s %d / 5\n\n", jugadas, manosJugadas);
+    printf("  Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
+  }
   if (estiloMazo == 1) {
   mostrar_cartas(jugador.cartas, 8);
   } else { //if (estiloMazo == 2) {
@@ -341,8 +345,8 @@ void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
 
 }
 
-void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescartes) {
-  if (*contadorDescartes >= 3) {
+void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescartes, int sumaDescartes) {
+  if (*contadorDescartes >= 3 + sumaDescartes) {
       limpiarPantalla();
       printf("Has alcanzado el máximo número de descartes permitidos.");
       return;
@@ -385,6 +389,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   //Limite de manos, condición de derrota.
   int manosJugadas = 0;
   int sumaComodin2 = 0;
+  int sumaDescartes = 0;
   int contadorDescartes = 0;
 
   inicializarMazo(mazo, mapa);
@@ -398,7 +403,10 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   else jugador.puntaje = 0;
 
   // COMODÍN 2
-  if (jugador.comodin == 2) sumaComodin2 += 2;
+  if (jugador.comodin == 2) {
+    sumaComodin2 += 2;
+    sumaDescartes = -1;
+  }
   
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
   // Pedir cartas al jugador
@@ -418,7 +426,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
       puts("  1) Elegir cartas");
       puts("  2) Ordenar mano por palo");
       puts("  3) Ordenar mano por valor");
-      if (contadorDescartes < 3) {
+      if (contadorDescartes < 3 + + sumaDescartes) {
           puts("  4) Descartar cartas");
       }
 
@@ -454,8 +462,8 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
           limpiarPantalla();
           break;
         case '4':
-          if (contadorDescartes < 3) {
-            descartarCartas(&jugador, mazoBarajado, &contadorDescartes);
+          if (contadorDescartes < 3 + sumaDescartes) {
+            descartarCartas(&jugador, mazoBarajado, &contadorDescartes, sumaDescartes);
           }
           limpiarPantalla();
           break;

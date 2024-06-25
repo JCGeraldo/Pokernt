@@ -78,22 +78,30 @@ char* numero_to_char(char numero) {
 }
 
 void mostrarComodin(Jugador jugador) {
-  printf("  -------------------------------------------------------\n");
+  printf(BLUE"  -------------------------------------------------------\n"RESET);
   switch(jugador.comodin) {
     case 1:
-      printf("  │          Sir Jester, the Knight of Misrule          │\n");
+      printf(BLUE"  │"RESET);
+      printf("            Sir Jester, the Knight of Misrule          ");
+      printf(BLUE"│\n"RESET);
       break;
     case 2:
-      printf("  │         Amenhotep, the king of the desert           │\n");
+      printf(BLUE"  │"RESET);
+      printf("         Amenhotep, the king of the desert           ");
+      printf(BLUE"│\n"RESET);
       break;
     case 3:
-      printf("  │                    Joker C           │\n");
+      printf(BLUE"  │"RESET);
+      printf("                    Joker C           ");
+      printf(BLUE"│\n"RESET);
       break;
     default:
-      printf("  │                !Sin comodín activo!                 │\n");
+      printf(BLUE"  │"RESET);
+      printf("                !Sin comodín activo!                 ");
+      printf(BLUE"│\n"RESET);
       break;
   }
-  printf("  -------------------------------------------------------\n");
+  printf(BLUE"  -------------------------------------------------------\n"RESET);
 }
 
 void linea1(Carta *cartas, int cantidad) {
@@ -538,7 +546,8 @@ void joker1(Jugador *jugador) {
   printf("\n   Para desbloquear a Sir Jester, el Caballero del Desorden...\n");
 
   char opcion[50];
-  printf("\n   ¿Desea activar a Sir Jester? (S/N): ");
+  printf("\n   ¿Desea activar a Sir Jester? ");
+  printf(GREEN"(S/N): "RESET);
   scanf(" %[^\n]s", opcion);
   if (strcmp(opcion, "S") == 0 || strcmp(opcion, "s") == 0) {
     printf("   ¡Has activado a Sir Jester!\n");
@@ -582,7 +591,8 @@ void joker2(Jugador *jugador) {
   printf("\n   Para desbloquear a Amenhotep, el rey del decierto...\n");
 
   char opcion[50];
-  printf("\n   ¿Desea activar a Amenhotep? (S/N): ");
+  printf("\n   ¿Desea activar a Amenhotep? ");
+  printf(GREEN"(S/N): "RESET);
   scanf(" %[^\n]s", opcion);
   if (strcmp(opcion, "S") == 0 || strcmp(opcion, "s") == 0) {
     printf("\n   ¡Has activado a Amenhotep!\n");
@@ -631,8 +641,8 @@ void mostrarChancho(){
 void mensajeVictoria(){
   puts(BLUE"========================================");
   printf(BLACK"           ♠♣");
-  printf(RED"♥♦ \n"RESET);
-  puts("VICTORIA ");
+  printf(RED"♦♥ "RESET);
+  printf("VICTORIA ");
   printf(RED"♥♦");
   printf(BLACK"♣♠ \n");
   puts(BLUE"========================================"RESET);
@@ -641,9 +651,13 @@ void mensajeVictoria(){
 }
 
 void mensajeFinal(){
-  puts("==========================================================");
-  puts("                   ♠♣♦♥  FIN DEL JUEGO  ♥♦♣♠");
-  puts("==========================================================");
+  puts(BLUE"==========================================================");
+  printf(BLACK"                   ♠♣");
+  printf(RED"♦♥ "RESET);
+  printf("FIN DEL JUEGO");
+  printf(RED"♥♦");
+  printf(BLACK"♣♠ \n");
+  puts(BLUE"=========================================================="RESET);
 }
 
 void mensajeEstrategias(Jugador jugador_tutorial , int mazo){
