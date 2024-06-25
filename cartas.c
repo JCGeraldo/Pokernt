@@ -27,6 +27,14 @@
 #define GREEN_BG "\033[42m"
 #define YELLOW_BG "\033[43m"
 #define BLUE_BG "\033[44m"
+#define MAGENTA_BG "\033[45m"
+#define CYAN_BG "\033[46m"
+#define WHITE_BG "\033[47m"
+#define BOLD "\033[1m"
+#define UNDERLINE "\033[4m"
+
+
+
 
 
 typedef struct {
@@ -570,27 +578,35 @@ void joker3(Jugador *jugador) {
 // ============================================================
 
 void mostrarTitulo(){
-  puts("========================================");
-  puts("         ♠♣♦♥  Pokern't  ♥♦♣♠");
-  puts("========================================\n");
+  puts(BLUE"\n========================================");
+  printf(BLACK"           ♠♣");
+  printf(RED"♦♥ "RESET); 
+  printf("Pokern't ");
+  printf(RED"♥♦");
+  printf(BLACK"♣♠ \n");
+  puts(BLUE"======================================== \n"RESET);
 }
 
 void mostrarChancho(){
-  printf("          ───▄█▄▄▄▄▄▄▄───▄──\n");
-  printf("          ──█▀██▀▄▄▀███▄▐─▌─\n");
-  printf("          ─████▌█▌▐█▐███▄▀▄─\n");
-  printf("          ──████▄▀▀▄████────\n");
-  printf("          ───▀█▀▀▀▀▀▀█▀─────\n");
-  printf("         ▀█████████████████▀\n");
-  printf("          █               █ \n");
-  printf("          █               █ \n");
-  printf("          █               █ \n");
+  printf(RED_B"              ▄█▄▄▄▄▄▄▄   ▄  \n");
+  printf("             █▀██▀▄▄▀███▄▐ ▌ \n");
+  printf("            ████▌█▌▐█▐███▄▀▄ \n");
+  printf("             ████▄▀▀▄████    \n");
+  printf("              ▀█▀▀▀▀▀▀█▀     \n");
+  printf(CYAN_B"          ▀█████████████████▀\n");
+  printf("           █               █ \n");
+  printf("           █               █ \n");
+  printf("           █               █ \n"RESET);
 }
 
 void mensajeVictoria(){
-  puts("====================================");
-  puts("         ♠♣♦♥  VICTORIA  ♥♦♣♠");
-  puts("====================================");
+  puts(BLUE"========================================");
+  printf(BLACK"           ♠♣");
+  printf(RED"♥♦ \n"RESET);
+  puts("VICTORIA ");
+  printf(RED"♥♦");
+  printf(BLACK"♣♠ \n");
+  puts(BLUE"========================================"RESET);
   mostrarChancho();
   puts("\nDesea continuar al siguiente nivel? (s/n)");
 }
