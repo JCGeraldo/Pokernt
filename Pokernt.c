@@ -12,6 +12,9 @@
 #include "tdas/map.h"
 #include "cartas.c"
 
+// Estructura Save File: nivel, pozo, dificultad, comodin, estilo
+
+
 typedef struct {
   int etapa; // Nivel de juego
   int pozo; // Pozo del nivel
@@ -381,8 +384,9 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa, int estiloMazo) {
   int contadorDescartes = 0;
 
   inicializarMazo(mazo, mapa);
-
-  Stack *mazoBarajado = stack_create(mazoBarajado); // Barajar el mazo
+  
+   // Barajar el mazo
+  Stack *mazoBarajado = stack_create(mazoBarajado);
   barajarMazo(mazo, 52, mazoBarajado);
 
   if (jugador.comodin == 1) {
@@ -455,8 +459,7 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa, int estiloMazo) {
       }
     } while(opcion != '1' && opcion != '2' && opcion != '3' && opcion != '4');
 
-    if (opcion == '4') continue;
-    if(cont == 0)continue;
+    if (opcion != '1') continue;
     manosJugadas++;
     //Mostrar cartas elegidas y pedir confirmacion(opcional)
     printf("Cartas elegidas: \n");
@@ -469,46 +472,65 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa, int estiloMazo) {
     asignacionPuntaje(&jugador, cartasElegidas, cont);
     presioneTeclaParaContinuar();
 
-    if(jugador.puntaje >= nivel.pozo)//Condición de victoria
+    if(jugador.puntaje >= nivel.pozo){//Condición de victoria
+      stack_clean(mazoBarajado);
+      free(mazoBarajado);
       return false;
-
+    }
     //se reemplazan las cartas usadas por otras del mazo y se vacia la lista de cartas elegidas.
-    for(int i = 0 ; i < 5 ; i++) {
+    for(int i = 0 ; i < cont ; i++) {
       jugador.cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
       cartasElegidas[i] = 0;
     }
 
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
-    printf("\n\n");
     limpiarPantalla();
   } while(manosJugadas < 5);
   stack_clean(mazoBarajado);
+  free(mazoBarajado);
   return true;
 }
 
-void guardarPartida(Nivel nivel, float factor){
+void guardarPartida(Nivel nivel, float factor, Jugador jugador, int estilo){
   FILE *archivo;
   archivo = fopen("SaveFile.txt", "w");
   if (archivo == NULL) {
     puts("Error al abrir el archivo");
     return;
   }
-  fprintf(archivo, "%d, %d, %f", nivel.etapa, nivel.pozo, factor);
+  fprintf(archivo, "%d, %d, %f, %d, %d", nivel.etapa, nivel.pozo, factor, jugador.comodin, estilo);
   fclose(archivo);
   puts("Partida guardada");
 }
 
-void reiniciarGuardado(Nivel *nivel, float factor) {
+void reiniciarGuardado(Nivel *nivel, float factor, int estiloMazo) {
   printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel->etapa);
   nivel->etapa = 1;
   nivel->pozo = 100;
   FILE *archivo;
   archivo = fopen("SaveFile.txt", "w");
   if (archivo == NULL) return;
-  fprintf(archivo, "%d, %d, %f", 1, 100, factor);   
+  fprintf(archivo, "%d, %d, %f, %d, %d", 1, 100, factor, 0, estiloMazo);   
   fclose(archivo);
 }
 // ==================== OPCIÓN 2 ====================
+
+void cargarPartida(Nivel *nivel, Jugador* jugador,float* factor, int* estilo ){
+  FILE *archivo;
+  archivo = fopen("SaveFile.txt", "r");
+  if (archivo == NULL){
+    puts("No se pudo abrir el archivo");
+    return;
+  }
+  fscanf(archivo, "%d, %d, %f, %d, %d", &nivel->etapa, &nivel->pozo, factor, &jugador->comodin,estilo);
+  fclose(archivo);
+  if(nivel->etapa == 1) {
+    puts("No hay partida en curso");
+    return;
+  }
+  puts("Partida cargada exitosamente.");
+  puts("Seleccione la opción 1 para continuar su partida.");
+}
 
 void mostrar_tutorial(Jugador jugador_tutorial) {
   limpiarPantalla();
@@ -613,7 +635,18 @@ void seleccionarMazo(int *mazo) {
     puts("Opción inválida. Intente nuevamente.");
   }
 }
-
+void cargarEstiloMazo(int *estilo){
+  FILE* archivo;
+  int etapa,pozo, comodin;
+  float factor;
+  
+  archivo = fopen("SaveFile.txt", "r");
+  if (archivo == NULL)
+    return;
+  fscanf(archivo, "%d, %d, %f, %d, %d", &etapa, &pozo, &factor, &comodin,estilo);
+  fclose(archivo);
+  return;
+}
 bool configuracionValida(char *cadena, int *ptrOpcion) {
   for (int i = 0 ; cadena[i] != '\0' ; i++) {
     if (!isdigit(cadena[i])) return false;
@@ -721,8 +754,9 @@ int main() {
       .puntaje = 0,
       .comodin = 0
   };
-  
-  FILE *archivo = NULL;
+
+  int estiloMazo = 1;
+  cargarEstiloMazo(&estiloMazo);
   
   mostrarTitulo();
   mostrarChancho();
@@ -736,9 +770,8 @@ int main() {
   nivel.pozo = 100;
   Jugador jugador;  
   jugador.comodin = 0;
-  char opcion;
+  char opcion, opcion2, opcion3;
   bool derrota = false;
-  int estiloMazo = 1;
   do {
      
       puts("1) Jugar");
@@ -752,19 +785,18 @@ int main() {
       switch (opcion) {
       case '1':
         do{
-          derrota = jugar(jugador, nivel, mapa, estiloMazo); 
+          derrota = jugar(jugador, nivel, mapa, estiloMazo);
           if(derrota) break;
           nivel.etapa++;
           nivel.pozo *= factor;
           limpiarPantalla();
           mensajeVictoria();
-          char opcion2 = getchar();
+          scanf(" %c", &opcion2);
           if(opcion2 == 'n'){
             puts("Desea guardar la partida? (s/n)");
-            char opcion3;
             scanf(" %c", &opcion3);
             if(opcion3 == 's')
-              guardarPartida(nivel, factor);
+              guardarPartida(nivel, factor, jugador, estiloMazo);
             nivel.etapa = 1;
             nivel.pozo = 100;
             break;
@@ -772,24 +804,11 @@ int main() {
         } while(!derrota);
         if(derrota){
           mensajeFinal();
-          reiniciarGuardado(&nivel, factor);       
+          reiniciarGuardado(&nivel, factor, estiloMazo);       
         }
         break;
       case '2':
-        // Cargar partida
-        archivo = fopen("SaveFile.txt", "r");
-        if (archivo == NULL){
-          puts("No se pudo abrir el archivo");
-          break;
-        }
-        fscanf(archivo, "%d, %d, %f", &nivel.etapa, &nivel.pozo, &factor);
-        fclose(archivo);
-        if(nivel.etapa == 1) {
-          puts("No hay partida en curso");
-          break;
-        }
-        puts("Partida cargada exitosamente.");
-        puts("Seleccione la opción 1 para continuar su partida.");
+        cargarPartida(&nivel, &jugador, &factor, &estiloMazo);
         break;
       case '3':
         mostrar_tutorial(jugador_tutorial);
