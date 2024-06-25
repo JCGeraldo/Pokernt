@@ -9,7 +9,7 @@
 #include "tdas/heap.h"
 #include "tdas/stack.h"
 #include "tdas/queue.h"
-#include "tdas/map.h"
+#include "tdas/hashmap.h"
 #include "cartas.c"
 
 // Estructura Save File: nivel, pozo, dificultad, comodin, estilo
@@ -25,11 +25,11 @@ void limpiarBuffer(){
   while(getchar() != '\n');
 }
 
-int is_equal(void *key1, void *key2) {
+/*int is_equal(void *key1, void *key2) {
   return *(int *)key1 == *(int *)key2;
-}
+}*/
 
-void inicializarMapa(Map *mapa){
+void inicializarMapa(HashMap *mapa){
   for(int i = 1; i <= 13; i++){
     int *numero = malloc(sizeof(int));
     *numero = i;
@@ -40,18 +40,18 @@ void inicializarMapa(Map *mapa){
       *puntaje = 10;
     else
       *puntaje = i;
-    map_insert(mapa, numero, puntaje);
+    insertMap(mapa, numero, puntaje);
   }
 }
 // ----------------------------------------------------------------
 
-void inicializarMazo(Carta *mazo, Map *mapa) {
+void inicializarMazo(Carta *mazo, HashMap *mapa) {
   int index = 0;
   for (int palo = 0 ; palo <= 3 ; palo++) {
     for (int valor = 1 ; valor <= 13 ; valor++) {
       mazo[index].numero = valor;
       mazo[index].palo = palo;
-      mazo[index].puntaje = *(int*)map_search(mapa, &valor)->value;;
+      mazo[index].puntaje = *(int*)searchMap(mapa, &valor)->value;;
       index++;
     }
   }
@@ -374,7 +374,7 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
 
 // ==================== OPCIÓN 1 ====================
 
-bool jugar(Jugador jugador, Nivel nivel, Map *mapa, int estiloMazo) {
+bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   limpiarPantalla();
   // Inicializar variables y el mazo
   Carta mazo[52];
@@ -753,7 +753,7 @@ void seleccionarComodin(Jugador *jugador) {
 
 int main() {
 
-  Map *mapa = map_create(is_equal);
+  HashMap *mapa = createMap(29);
   inicializarMapa(mapa);
   Jugador jugador_tutorial = {
       .cartas = {
