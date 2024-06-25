@@ -86,13 +86,15 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 
 // ----------------------------------------------------------------
 
-void  mostrarMano(Jugador jugador, int majosJugadas, int contadorDescartes, int estiloMazo) { 
+void  mostrarMano(Jugador jugador, int manosJugadas, int contadorDescartes, int estiloMazo) { 
   char *jugadas = {"Jugadas:"};
   char *descartes = {"Descartes:"};
-  printf("%42s %d / 5\n\n", jugadas, majosJugadas);
-  printf("Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
+  if (jugador.comodin == 2) printf("%42s %d / 7\n\n", jugadas, manosJugadas); // COMODÍN 2
+  else printf("%42s %d / 5\n\n", jugadas, manosJugadas);
+  
+  printf("  Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
   if (estiloMazo == 1) {
-    mostrar_cartas(jugador.cartas, 8);
+  mostrar_cartas(jugador.cartas, 8);
   } else { //if (estiloMazo == 2) {
     mostrar_cartas_dos(jugador.cartas, 8);
   }
@@ -379,8 +381,10 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   // Inicializar variables y el mazo
   Carta mazo[52];
   int cartasElegidas[5] = {0,0,0,0,0};
-
-  int manosJugadas = 0; //Limite de manos, condición de derrota.
+  
+  //Limite de manos, condición de derrota.
+  int manosJugadas = 0;
+  int sumaComodin2 = 0;
   int contadorDescartes = 0;
 
   inicializarMazo(mazo, mapa);
@@ -389,23 +393,25 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   Stack *mazoBarajado = stack_create(mazoBarajado);
   barajarMazo(mazo, 52, mazoBarajado);
 
-  if (jugador.comodin == 1) {
-    jugador.puntaje = 99;
-  } else {
-    jugador.puntaje = 0;
-  }
+  // COMODÍN 1
+  if (jugador.comodin == 1) jugador.puntaje = 99;
+  else jugador.puntaje = 0;
+
+  // COMODÍN 2
+  if (jugador.comodin == 2) sumaComodin2 += 2;
+  
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
   // Pedir cartas al jugador
   int carta;
   char opcion;
-  do{
+  do {
     int cont = 0;
 
     //Eleccion de cartas.
     do {
       mostrarComodin(jugador);
-      printf("\nPuntaje = %-30d Pozo = %d\n\n", jugador.puntaje, nivel.pozo);
-      printf("Nivel %d" , nivel.etapa);
+      printf("\n  Puntaje = %-30d Pozo = %d\n\n", jugador.puntaje, nivel.pozo);
+      printf("  Nivel %d" , nivel.etapa);
       mostrarMano(jugador, manosJugadas, contadorDescartes, estiloMazo);
       puts("==============================================================\n");
       puts("Elija una opcion: ");
@@ -485,7 +491,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
 
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
     limpiarPantalla();
-  } while(manosJugadas < 5);
+  } while(manosJugadas < 5+sumaComodin2);
   stack_clean(mazoBarajado);
   free(mazoBarajado);
   return true;
@@ -548,12 +554,9 @@ void mostrar_tutorial(Jugador jugador_tutorial , int *mazo) {
   printf("1. Recibes 8 cartas del mazo.\n");
   printf("2. Las cartas tienen un número (1 a 13) y un palo (Corazones, Diamantes, Tréboles, Picas).\n\n");
 
-
   if (*mazo == 1) mostrar_cartas(jugador_tutorial.cartas, 8);
   else if (*mazo == 2) mostrar_cartas_dos(jugador_tutorial.cartas, 8);
       
-
-    
   puts("3. Puedes elegir hasta 5 cartas para jugar.");
   puts("4. Cada jugada suma puntos basados en las cartas elegidas y la combinación que forman.");
   puts("5. Puedes descartar cartas para obtener nuevas cartas.");
@@ -712,7 +715,7 @@ void seleccionarComodin(Jugador *jugador) {
   printf("     .--------------------------------------------------.");
   printf("\n     │ 1. Sir Jester, the Knight of Misrule             │\n");
   printf("     ----------------------------------------------------");
-  printf("\n     │ 2. Joker B                                       │\n");
+  printf("\n     │ 2. Amenhotep, the king of the desert             │\n");
   printf("     ----------------------------------------------------");
   printf("\n     │ 3. Joker C                                       │\n");
   printf("     '--------------------------------------------------'");

@@ -78,20 +78,22 @@ char* numero_to_char(char numero) {
 }
 
 void mostrarComodin(Jugador jugador) {
+  printf("  -------------------------------------------------------\n");
   switch(jugador.comodin) {
     case 1:
-      printf("Sir Jester, the Knight of Misrule\n");
+      printf("  │          Sir Jester, the Knight of Misrule          │\n");
       break;
     case 2:
-      printf("Joker B\n");
+      printf("  │         Amenhotep, the king of the desert           │\n");
       break;
     case 3:
-      printf("Joker C\n");
+      printf("  │                    Joker C           │\n");
       break;
     default:
-      printf("!Sin comodin activo!\n");
+      printf("  │                !Sin comodín activo!                 │\n");
       break;
   }
+  printf("  -------------------------------------------------------\n");
 }
 
 void linea1(Carta *cartas, int cantidad) {
@@ -509,62 +511,89 @@ void mostrar_cartas_dos(Carta *cartas, int cantidad) {
 void joker1(Jugador *jugador) {
   limpiarPantalla();
   printf("\n");
-  printf("================= Sir Jester, the Knight of Misrule =================\n\n");
-  printf("En la era moderna, tener a Sir Jester activo otorga un total de 99 puntos\n");
-  printf("adicionales, recordando siempre que la alegría y el valor pueden cambiar el\n");
-  printf("destino, tal como lo hizo el caballero del desorden en tiempos antiguos.\n\n");
+  printf("   ================= Sir Jester, the Knight of Misrule =================\n\n");
+  printf("  En la era moderna, tener a Sir Jester activo otorga un total de 99 puntos\n");
+  printf(" adicionales, recordando siempre que la alegría y el valor pueden cambiar el\n");
+  printf("   destino, tal como lo hizo el caballero del desorden en tiempos antiguos.\n\n");
 
-  printf("                  ____________________________\n");
-  printf("                  |                          |\n");
-  printf("                  |   ,^.                    |\n");
-  printf("                  |   |||                    |\n");
-  printf("                  |   |||       _T_          |\n");
-  printf("                  |   |||   .-.[:|:].-.      |\n");
-  printf("                  |   ===_ /\\|  '\"'  |/      |\n");
-  printf("                  |    E]_|\\/ \\--|-|'''''|   |\n");
-  printf("                  |    O  `'  '=[:]| A   |   |\n");
-  printf("                  |           /\"\"\"\"|   P |   |\n");
-  printf("                  |          /\"\"\"\"\".`.__.'   |\n");
-  printf("                  |         []\"/\"\"\\[]        |\n");
-  printf("                  |         | \\     / |      |\n");
-  printf("                  |         | |     | |      |\n");
-  printf("                  |       <\\\\\\)     (///>    |\n");
-  printf("                  |                          |\n");
-  printf("                  |__________________________|\n\n");
+  printf("                     ____________________________\n");
+  printf("                     |                          |\n");
+  printf("                     |   ,^.                    |\n");
+  printf("                     |   |||                    |\n");
+  printf("                     |   |||       _T_          |\n");
+  printf("                     |   |||   .-.[:|:].-.      |\n");
+  printf("                     |   ===_ /\\|  '\"'  |/      |\n");
+  printf("                     |    E]_|\\/ \\--|-|'''''|   |\n");
+  printf("                     |    O  `'  '=[:]| A   |   |\n");
+  printf("                     |           /\"\"\"\"|   P |   |\n");
+  printf("                     |          /\"\"\"\"\".`.__.'   |\n");
+  printf("                     |         []\"/\"\"\\[]        |\n");
+  printf("                     |         | \\     / |      |\n");
+  printf("                     |         | |     | |      |\n");
+  printf("                     |       <\\\\\\)     (///>    |\n");
+  printf("                     |                          |\n");
+  printf("                     |__________________________|\n\n");
 
   // CONDICIÓN LOGICA PARA PREGUNTAR SI ESTÁ DESBLOQUEADO O NO:
-  printf("\nPara desbloquear a Sir Jester, el Caballero del Desorden...\n");
+  printf("\n   Para desbloquear a Sir Jester, el Caballero del Desorden...\n");
 
   char opcion[50];
-  printf("\n¿Desea activar a Sir Jester? (S/N): ");
+  printf("\n   ¿Desea activar a Sir Jester? (S/N): ");
   scanf(" %[^\n]s", opcion);
   if (strcmp(opcion, "S") == 0 || strcmp(opcion, "s") == 0) {
-    printf("¡Has activado a Sir Jester!\n");
+    printf("   ¡Has activado a Sir Jester!\n");
     jugador->comodin = 1;
   } else if (strcmp(opcion, "N") == 0 || strcmp(opcion, "n") == 0) {
-    printf("\n¡No has activado a Sir Jester!\n\n");
+    printf("\n   ¡No has activado a Sir Jester!\n\n");
     return;
   } else {
-    printf("\nOpción inválida.\n");
+    printf("\n   Opción inválida.\n");
   }
   printf("\n");
 }
 
 void joker2(Jugador *jugador) {
   limpiarPantalla();
-  printf("\n\n");
-  printf("================= JOKER B =================\n");
+  printf("\n");
+  printf("  ================= Amenhotep, the king of the desert =================\n\n");
+  printf("    Aquellos que tienen la suerte de obtener a Amenhotep en su mazo,\n");
+  printf("   se les permitirá realizar dos jugadas adicionales durante cada nivel,\n");
+  printf("replicando el poder del faraón y potencialmente cambiando el curso del juego.\n\n");
 
-  Jugador cartasAs = {
-      .cartas = {
-          {13, 0, 0}, {13, 1, 0}, {13, 2, 0}, {13, 3, 0},
-          {12, 0, 0}, {12, 1, 0}, {12, 2, 0}, {12, 3, 0}
-      },
-      .puntaje = 0,
-      .comodin = 0
-  };
-  mostrar_cartas(cartasAs.cartas, 8);
-  
+  printf("                     ____________________________\n");
+  printf("                     |                          |\n");
+  printf("                     |                      ..  |\n");
+  printf("                     |   ..                 /\\. |\n");
+  printf("                     |   /\\.    _-_        /:_\\/|\n");
+  printf("                     |  /:_\\/ /'. .'\\ ___ /__:_\\|\n");
+  printf("                     |       /(|`/ !)\\  /:__:___|\n");
+  printf("                     |      |  \\ = /  |/ / /\\   |\n");
+  printf("                     |       `  ---  ./ / / /\\  |\n");
+  printf("                     |      /--- -----\\/ / / /  |\n");
+  printf("                     |     /---  ----- `/ / /   |\n");
+  printf("                     |   _/--- __ _/  ' `/ /    |\n");
+  printf("                     | /     /XXX/     ! `/     |\n");
+  printf("                     ||_|_|_|XXX|_|_|_'|_/      |\n");
+  printf("                     |                          |\n");
+  printf("                     |                          |\n");
+  printf("                     |__________________________|\n\n");
+
+  // CONDICIÓN LOGICA PARA PREGUNTAR SI ESTÁ DESBLOQUEADO O NO:
+  printf("\n   Para desbloquear a Amenhotep, el rey del decierto...\n");
+
+  char opcion[50];
+  printf("\n   ¿Desea activar a Amenhotep? (S/N): ");
+  scanf(" %[^\n]s", opcion);
+  if (strcmp(opcion, "S") == 0 || strcmp(opcion, "s") == 0) {
+    printf("\n   ¡Has activado a Amenhotep!\n");
+    jugador->comodin = 2;
+  } else if (strcmp(opcion, "N") == 0 || strcmp(opcion, "n") == 0) {
+    printf("\n   ¡No has activado a Amenhotep!\n\n");
+    return;
+  } else {
+    printf("\n   Opción inválida.\n");
+  }
+  printf("\n");
 }
 
 void joker3(Jugador *jugador) {
