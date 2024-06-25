@@ -12,13 +12,10 @@
 #include "tdas/map.h"
 #include "cartas.c"
 
-
 typedef struct {
   int etapa; // Nivel de juego
   int pozo; // Pozo del nivel
 } Nivel;
-
-
 
 // ----------------------------------------------------------------
 void limpiarBuffer(){
@@ -86,12 +83,16 @@ void repartirMano(Jugador* jugador, Stack* mazoBarajado) {
 
 // ----------------------------------------------------------------
 
-void  mostrarMano(Jugador jugador, int majosJugadas, int contadorDescartes) { 
+void  mostrarMano(Jugador jugador, int majosJugadas, int contadorDescartes, int estiloMazo) { 
   char *jugadas = {"Jugadas:"};
   char *descartes = {"Descartes:"};
   printf("%42s %d / 5\n\n", jugadas, majosJugadas);
   printf("Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
-  mostrar_cartas_dos(jugador.cartas, 8);
+  if (estiloMazo == 1) {
+    mostrar_cartas(jugador.cartas, 8);
+  } else { //if (estiloMazo == 2) {
+    mostrar_cartas_dos(jugador.cartas, 8);
+  }
 }
 
 // ----------------------------------------------------------------
@@ -114,8 +115,6 @@ int compararCartasPalo(const void *a, const void *b) {
   return cartaA->numero - cartaB->numero;
 }
 
-// ----------------------------------------------------------------
-
 void ordenarCartas(Carta* cartas, int largo) {
   if (largo < 2) return;
   qsort(cartas, largo, sizeof(Carta), compararCartas);
@@ -125,8 +124,6 @@ void ordenarCartasPalo(Carta* cartas, int largo) {
   if (largo < 2) return;
   qsort(cartas, largo, sizeof(Carta), compararCartasPalo);
 }
-
-// ----------------------------------------------------------------
 
 int compararNumerico(const void *a, const void *b) {
   Carta *cartaA = (Carta *)a;
@@ -374,7 +371,7 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
 
 // ==================== OPCIÓN 1 ====================
 
-bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
+bool jugar(Jugador jugador, Nivel nivel, Map *mapa, int estiloMazo) {
   limpiarPantalla();
   // Inicializar variables y el mazo
   Carta mazo[52];
@@ -403,9 +400,9 @@ bool jugar(Jugador jugador, Nivel nivel, Map *mapa) {
     //Eleccion de cartas.
     do {
       mostrarComodin(jugador);
-      printf("\nPuntaje = %-30d Pozo = %d\n\n\n", jugador.puntaje, nivel.pozo);
+      printf("\nPuntaje = %-30d Pozo = %d\n\n", jugador.puntaje, nivel.pozo);
       printf("Nivel %d" , nivel.etapa);
-      mostrarMano(jugador, manosJugadas, contadorDescartes);
+      mostrarMano(jugador, manosJugadas, contadorDescartes, estiloMazo);
       puts("==============================================================\n");
       puts("Elija una opcion: ");
       puts("  1) Elegir cartas");
@@ -501,7 +498,7 @@ void guardarPartida(Nivel nivel, float factor){
   puts("Partida guardada");
 }
 
-void reiniciarGuardado(Nivel *nivel, float factor){
+void reiniciarGuardado(Nivel *nivel, float factor) {
   printf("\nFelicitaciones, alcanzaste el nivel %d.\n\n", nivel->etapa);
   nivel->etapa = 1;
   nivel->pozo = 100;
@@ -512,9 +509,6 @@ void reiniciarGuardado(Nivel *nivel, float factor){
   fclose(archivo);
 }
 // ==================== OPCIÓN 2 ====================
-
-
-
 
 void mostrar_tutorial(Jugador jugador_tutorial) {
   limpiarPantalla();
@@ -539,7 +533,8 @@ void mostrar_tutorial(Jugador jugador_tutorial) {
 }
 
 // ==================== OPCIÓN 3 ====================
-void seleccionarDificultad(float *factor, Nivel* nivel){
+
+void seleccionarDificultad(float *factor, Nivel* nivel) {
   limpiarPantalla();
   mostrarTitulo();
   puts("\nSeleccionar una nueva dificultad lo obligará a comenzar en el nivel 1");
@@ -551,14 +546,14 @@ void seleccionarDificultad(float *factor, Nivel* nivel){
   puts("5. Volver al menú principal");
   int opcion;
   float temp;
-  do{
+  do {
     printf("Ingrese una opción (1 - 5): ");
-    if(!scanf("%d", &opcion) || opcion < 1 || opcion > 5){
+    if(!scanf("%d", &opcion) || opcion < 1 || opcion > 5) {
       puts("Ingrese una opción válida !!");
       limpiarBuffer();
     if(opcion == 5) return;
     }
-  }while(opcion < 1 || opcion > 5);
+  } while(opcion < 1 || opcion > 5);
   switch (opcion){
     case 1:
       temp = 1.2;
@@ -575,13 +570,84 @@ void seleccionarDificultad(float *factor, Nivel* nivel){
     case 5:
       break;
   }
-  if(*factor != temp){
+  if(*factor != temp) {
     nivel->etapa = 1;
     nivel->pozo = 100;
   } 
   *factor = temp;
 }
 
+bool mazoValida(char *cadena, int *ptrOpcion) {
+  for (int i = 0 ; cadena[i] != '\0' ; i++) {
+    if (!isdigit(cadena[i])) return false;
+  }
+  *ptrOpcion = atoi(cadena);
+  if (*ptrOpcion < 1 || *ptrOpcion > 3) return false;
+  return true;
+}
+
+void seleccionarMazo(int *mazo) {
+  limpiarPantalla();
+  mostrarTitulo();
+  puts("Seleccione el mazo de cartas:\n");
+  puts("1. Mazo clásico inglés\n");
+  puts("2. Mazo minimalista\n");
+  puts("3. Volver al menú principal\n");
+  char opcionAux[50];
+  int opcion;
+  scanf(" %[^\n]s", opcionAux);
+  if (mazoValida(opcionAux, &opcion)) {
+    switch (opcion) {
+      case 1:
+        *mazo = 1;
+        printf("\nHa seleccionado el mazo clásico inglés.\n\n");
+        break;
+      case 2:
+        printf("\nHa seleccionado el mazo minimalista.\n\n");
+        *mazo = 2;
+        break;
+      case 3:
+        return;
+    }
+  } else {
+    puts("Opción inválida. Intente nuevamente.");
+  }
+}
+
+bool configuracionValida(char *cadena, int *ptrOpcion) {
+  for (int i = 0 ; cadena[i] != '\0' ; i++) {
+    if (!isdigit(cadena[i])) return false;
+  }
+  *ptrOpcion = atoi(cadena);
+  if (*ptrOpcion < 1 || *ptrOpcion > 3) return false;
+  return true;
+}
+
+void configuracion(float *factor, Nivel* nivel, int *mazo) {
+  limpiarPantalla();
+  mostrarTitulo();
+  puts("Configuración del juego:\n");
+  puts("1. Elegir dificultad\n");
+  puts("2. Elegir mazo\n");
+  puts("3. Volver al menú principal\n");
+  char opcionAux[50];
+  int opcion;
+  scanf(" %[^\n]s", opcionAux);
+  if (configuracionValida(opcionAux, &opcion)) {
+    switch (opcion) {
+      case 1:
+        seleccionarDificultad(factor, nivel);
+        break;
+      case 2:
+        seleccionarMazo(mazo);
+        break;
+      case 3:
+        return;
+    }
+  } else {
+    puts("Opción inválida. Intente nuevamente.");
+  }
+}
 
 // ==================== OPCIÓN 5 ====================
 
@@ -663,6 +729,7 @@ int main() {
   jugador.comodin = 0;
   char opcion;
   bool derrota = false;
+  int estiloMazo = 1;
   do {
      
       puts("1) Jugar");
@@ -676,7 +743,7 @@ int main() {
       switch (opcion) {
       case '1':
         do{
-          derrota = jugar(jugador, nivel, mapa); 
+          derrota = jugar(jugador, nivel, mapa, estiloMazo); 
           if(derrota) break;
           nivel.etapa++;
           nivel.pozo *= factor;
@@ -720,7 +787,7 @@ int main() {
         break;
       case '4':
         limpiarPantalla();
-        seleccionarDificultad(&factor, &nivel);
+        configuracion(&factor, &nivel, &estiloMazo);
         break;
       case '5':
         limpiarPantalla();

@@ -494,7 +494,6 @@ void mostrar_cartas_dos(Carta *cartas, int cantidad) {
   printf("\n\n");
 }
 
-
 // ============================================================
 // ========================== JOKERS ==========================
 // ============================================================
@@ -587,6 +586,7 @@ void mostrarChancho(){
   printf("          █               █ \n");
   printf("          █               █ \n");
 }
+
 void mensajeVictoria(){
   puts("====================================");
   puts("         ♠♣♦♥  VICTORIA  ♥♦♣♠");
@@ -594,6 +594,7 @@ void mensajeVictoria(){
   mostrarChancho();
   puts("\nDesea continuar al siguiente nivel? (s/n)");
 }
+
 void mensajeFinal(){
   puts("==========================================================");
   puts("                   ♠♣♦♥  FIN DEL JUEGO  ♥♦♣♠");
