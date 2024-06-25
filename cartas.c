@@ -617,7 +617,7 @@ void mensajeFinal(){
   puts("==========================================================");
 }
 
-void mensajeEstrategias(){
+void mensajeEstrategias(Jugador jugador_tutorial , int mazo){
   printf("Controles Básicos:\n");
   printf("1. Selecciona hasta 5 cartas para jugar.\n");
   printf("2. Ordena tu mano por valores o por palo. Así es más fácil ver las combinaciones!\n");
@@ -630,14 +630,16 @@ void mensajeEstrategias(){
   puts("Puntaje = 0                              Pozo = 100\n\n");
   puts("                                         Jugadas: 0 / 5\n");
   puts("Mano:                                    Descartes: 0 / 3\n");
-  puts(".-------.-------.-------.-------.-------.-------.-------.-------.");
-  puts("|7♠     |5♥     |6♦     |6♠     |Q♥     |9♦     |10♣  ♣ |8♦     |");
-  puts("|  ♠ ♠  |  ♥ ♥  |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ | ♣ ♣ ♣ | ♦ ♦ ♦ |");
-  puts("| ♠ ♠ ♠ |   ♥   |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ |  ♣ ♣  |  ♦ ♦  |");
-  puts("|  ♠ ♠  |  ♥ ♥  |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ | ♣ ♣ ♣ | ♦ ♦ ♦ |");
-  puts("|     ♠7|     ♥5|     ♦6|     ♠6|     ♥Q|     ♦9| ♣  ♣10|     ♦8|");
-  puts("`-------^-------^-------^-------^-------^-------^-------^-------´");
-  puts("    1       2       3       4       5       6       7       8");
+  if (mazo == 1) mostrar_cartas(jugador_tutorial.cartas, 8);
+  else if (mazo == 2) mostrar_cartas_dos(jugador_tutorial.cartas, 8);
+  //puts(".-------.-------.-------.-------.-------.-------.-------.-------.");
+  //puts("|7♠     |5♥     |6♦     |6♠     |Q♥     |9♦     |10♣  ♣ |8♦     |");
+  //puts("|  ♠ ♠  |  ♥ ♥  |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ | ♣ ♣ ♣ | ♦ ♦ ♦ |");
+  //puts("| ♠ ♠ ♠ |   ♥   |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ |  ♣ ♣  |  ♦ ♦  |");
+  //puts("|  ♠ ♠  |  ♥ ♥  |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ | ♣ ♣ ♣ | ♦ ♦ ♦ |");
+  //puts("|     ♠7|     ♥5|     ♦6|     ♠6|     ♥Q|     ♦9| ♣  ♣10|     ♦8|");
+  //puts("`-------^-------^-------^-------^-------^-------^-------^-------´");
+  //puts("    1       2       3       4       5       6       7       8");
 
   puts("============================================================\n");
 

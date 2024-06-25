@@ -531,8 +531,11 @@ void cargarPartida(Nivel *nivel, Jugador* jugador,float* factor, int* estilo ){
   puts("Partida cargada exitosamente.");
   puts("Seleccione la opción 1 para continuar su partida.");
 }
+int actualizar_mazo(int tipo_carta){
+  return tipo_carta;
+}
 
-void mostrar_tutorial(Jugador jugador_tutorial) {
+void mostrar_tutorial(Jugador jugador_tutorial , int *mazo) {
   limpiarPantalla();
   mostrarTitulo();
   printf("Bienvenido al juego de cartas Pokern't!\n\n");
@@ -544,14 +547,20 @@ void mostrar_tutorial(Jugador jugador_tutorial) {
   printf("Mecánicas Básicas del Juego:\n");
   printf("1. Recibes 8 cartas del mazo.\n");
   printf("2. Las cartas tienen un número (1 a 13) y un palo (Corazones, Diamantes, Tréboles, Picas).\n\n");
-  mostrar_cartas(jugador_tutorial.cartas, 8);
+
+
+  if (*mazo == 1) mostrar_cartas(jugador_tutorial.cartas, 8);
+  else if (*mazo == 2) mostrar_cartas_dos(jugador_tutorial.cartas, 8);
+      
+
+    
   puts("3. Puedes elegir hasta 5 cartas para jugar.");
   puts("4. Cada jugada suma puntos basados en las cartas elegidas y la combinación que forman.");
   puts("5. Puedes descartar cartas para obtener nuevas cartas.");
   puts("6. Ganas cuando alcanzas el puntaje objetivo, indicado como pozo");
   puts("7. Pierdes si se agotan las jugadas y no logras alcanzar el pozo");
   getchar();
-  mensajeEstrategias();
+  mensajeEstrategias(jugador_tutorial , *mazo);
 }
 
 // ==================== OPCIÓN 3 ====================
@@ -811,7 +820,7 @@ int main() {
         cargarPartida(&nivel, &jugador, &factor, &estiloMazo);
         break;
       case '3':
-        mostrar_tutorial(jugador_tutorial);
+        mostrar_tutorial(jugador_tutorial, &estiloMazo);
         break;
       case '4':
         limpiarPantalla();
