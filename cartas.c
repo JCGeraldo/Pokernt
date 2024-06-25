@@ -105,7 +105,10 @@ void mostrarComodin(Jugador jugador) {
 }
 
 void linea1(Carta *cartas, int cantidad) {
-  printf(".-------.-------.-------.-------.-------.-------.-------.-------.\n");
+  for(int i = 0; i < cantidad; i++){
+    printf(".-------");
+  }
+  printf(".\n");
   for (int i = 0 ; i < cantidad; i++) {
     char *figura = palo_to_char(cartas[i].palo);
     char *numero = numero_to_char(cartas[i].numero);
@@ -413,8 +416,16 @@ void linea5(Carta *cartas, int cantidad) {
     }
   }
   printf("|\n");
-
-  printf("`-------^-------^-------^-------^-------^-------^-------^-------´\n");
+  printf("`");
+  for(int i = 0 ; i < cantidad ; i++) {
+    printf("-------");
+    if(i == cantidad - 1) {
+      printf("´");
+    }
+    else
+      printf("^");
+  }
+  printf("\n");
 }
 
 void mostrar_cartas(Carta *cartas, int cantidad) {
@@ -437,8 +448,11 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
 }
 
 void mostrar_cartas_dos(Carta *cartas, int cantidad) {
-
-  printf(BLUE".-------.-------.-------.-------.-------.-------.-------.-------.\n"RESET);
+  printf(BLUE".");
+  for(int i = 0; i < cantidad; i++){
+    printf("-------.");
+  }
+  printf("\n");
 
   // Línea 1
   for (int i = 0 ; i < cantidad; i++) {
@@ -502,9 +516,12 @@ void mostrar_cartas_dos(Carta *cartas, int cantidad) {
     }
     printf("%-2s", numero);
   }
-  printf(BLUE"|\n"RESET);
-
-  printf(BLUE"`-------^-------^-------^-------^-------^-------^-------^-------´\n"RESET);
+  printf(BLUE"|\n");
+  printf("`");
+  for(int i = 0; i < cantidad; i++){
+    printf("-------");
+    i == cantidad - 1? printf("´\n"RESET): printf("^");
+  }
   for (int i = 1 ; i <= cantidad ; i++) {
       if (i == 1) printf("%5d", i);
       else printf("%8d", i);

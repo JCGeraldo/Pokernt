@@ -315,7 +315,7 @@ bool esPareja(Carta* cartas, int largo) {
 
 // ----------------------------------------------------------------
 
-void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
+void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo, int estilo) {
   if (largo == 0) return;
   // Crear un arreglo de cartas seleccionadas
   Carta* cartasSeleccionadas = (Carta*)malloc(largo * sizeof(Carta));
@@ -330,11 +330,12 @@ void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
     cartasSeleccionadas[i] = jugador->cartas[posicion-1];
   }
 
-  printf("Cartas seleccionadas en orden:\n");
+  printf("Cartas seleccionadas:\n");
   ordenarCartas(cartasSeleccionadas, largo);
-  for (int i = 0 ; i < largo ; i++) {
+  estilo == 1? mostrar_cartas(cartasSeleccionadas, largo) : mostrar_cartas_dos(cartasSeleccionadas, largo);
+  /*for (int i = 0 ; i < largo ; i++) {
     printf("|%d %d|  ", cartasSeleccionadas[i].numero, cartasSeleccionadas[i].palo);
-  }
+  }*/
   printf("\n");
 
   // Calcular el puntaje basado en las cartas seleccionadas
@@ -396,6 +397,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   
    // Barajar el mazo
   Stack *mazoBarajado = stack_create(mazoBarajado);
+  stack_pop(mazoBarajado);
   barajarMazo(mazo, 52, mazoBarajado);
 
   // COMODÍN 1
@@ -426,7 +428,8 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
       puts("  1) Elegir cartas");
       puts("  2) Ordenar mano por palo");
       puts("  3) Ordenar mano por valor");
-      if (contadorDescartes < 3 + + sumaDescartes) {
+
+      if (contadorDescartes < 3 + sumaDescartes) {
           puts("  4) Descartar cartas");
       }
 
@@ -475,15 +478,9 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
 
     if (opcion != '1') continue;
     manosJugadas++;
-    //Mostrar cartas elegidas y pedir confirmacion(opcional)
-    printf("Cartas elegidas: \n");
-    for(int i = 0; i < cont; i++){
-      if(jugador.cartas[cartasElegidas[i] - 1].numero == 0) break;
-      printf("|%d %d|  ", jugador.cartas[cartasElegidas[i] - 1].numero, jugador.cartas[cartasElegidas[i] - 1].palo);
-    }
-    printf("\n");
+    
 
-    asignacionPuntaje(&jugador, cartasElegidas, cont);
+    asignacionPuntaje(&jugador, cartasElegidas, cont, estiloMazo);
     presioneTeclaParaContinuar();
 
     if(jugador.puntaje >= nivel.pozo){//Condición de victoria
@@ -491,6 +488,8 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
       free(mazoBarajado);
       return false;
     }
+    if(manosJugadas == 5+sumaComodin2)
+      break;
     //se reemplazan las cartas usadas por otras del mazo y se vacia la lista de cartas elegidas.
     for(int i = 0 ; i < cont ; i++) {
       jugador.cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
