@@ -91,7 +91,7 @@ void  mostrarMano(Jugador jugador, int majosJugadas, int contadorDescartes) {
   char *descartes = {"Descartes:"};
   printf("%42s %d / 5\n\n", jugadas, majosJugadas);
   printf("Mano: %45s %d / 3\n\n", descartes, contadorDescartes);
-  mostrar_cartas(jugador.cartas, 8);
+  mostrar_cartas_dos(jugador.cartas, 8);
 }
 
 // ----------------------------------------------------------------

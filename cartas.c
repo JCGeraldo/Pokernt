@@ -418,62 +418,77 @@ void mostrar_cartas(Carta *cartas, int cantidad) {
   printf("\n\n");
 }
 
-void mostrar_cartas_dos(Carta *cartas, int cantidad){
+void mostrar_cartas_dos(Carta *cartas, int cantidad) {
 
   printf(BLUE".-------.-------.-------.-------.-------.-------.-------.-------.\n"RESET);
 
   // Línea 1
   for (int i = 0 ; i < cantidad; i++) {
+    char *figura = palo_to_char(cartas[i].palo);
+    char *numero = numero_to_char(cartas[i].numero);
     printf(BLUE"|"RESET);
-    printf("%-2s  ", numero_to_char(cartas[i].numero));
-    if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦"){
-      printf(RED"%-2s  "RESET, palo_to_char(cartas[i].palo));
-    }
-    else if (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣"){
-      printf(BLACK"%-2s  "RESET, palo_to_char(cartas[i].palo));
+    printf("%-2s  ", numero);
+    if (figura == "♥" || figura == "♦") {
+      printf(RED"%-2s  "RESET, figura);
+    } else if (figura == "♠" || figura == "♣") {
+      printf(BLACK"%-2s  "RESET, figura);
     }
   }
   printf(BLUE"|\n"RESET);
+  
   // Línea 2
   for (int i = 0 ; i < cantidad ; i++) {
+    char *figura = palo_to_char(cartas[i].palo);
     printf(BLUE"|"RESET);
-      if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦"){
-        printf(RED"   %s%s  "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
-      }
-    else if (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣"){
-        printf(BLACK"   %s%s  "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+      if (figura == "♥" || figura == "♦") {
+        printf(RED"   %s%s  "RESET, figura, figura);
+      } else if (figura == "♠" || figura == "♣") {
+        printf(BLACK"   %s%s  "RESET, figura, figura);
     }
   }
   printf(BLUE"|\n"RESET);
 
   // Línea 3
   for (int i = 0 ; i < cantidad ; i++) {
+    char *figura = palo_to_char(cartas[i].palo);
     printf(BLUE"|"RESET);
-    if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦"){
-      printf(RED"  %s%s   "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
-    }
-    else if (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣"){
-      printf(BLACK"  %s%s   "RESET, palo_to_char(cartas[i].palo), palo_to_char(cartas[i].palo));
+    if (figura == "♥" || figura == "♦") {
+      printf(RED"  %s%s%s  "RESET, figura, figura, figura);
+    } else if (figura == "♠" || figura == "♣") {
+      printf(BLACK"  %s%s%s  "RESET, figura, figura, figura);
     }
   }
   printf(BLUE"|\n"RESET);
 
-  // Línea 4
+  // Línea 4 
   for (int i = 0 ; i < cantidad ; i++) {
+    char *figura = palo_to_char(cartas[i].palo);
     printf(BLUE"|"RESET);
-    if (palo_to_char(cartas[i].palo) == "♥" || palo_to_char(cartas[i].palo) == "♦")
-      printf(RED"  %s  "RESET, palo_to_char(cartas[i].palo));
+    if (figura == "♥" || figura == "♦") {
+      printf(RED"  %s%s   "RESET, figura, figura);
+    } else if (figura == "♠" || figura == "♣") {
+      printf(BLACK"  %s%s   "RESET, figura, figura);
+    }
+  }
+  printf(BLUE"|\n"RESET);
 
-    else if  (palo_to_char(cartas[i].palo) == "♠" || palo_to_char(cartas[i].palo) == "♣")
-      printf(BLACK"  %s  "RESET, palo_to_char(cartas[i].palo));
-
-    printf("%-2s", numero_to_char(cartas[i].numero));
+  // Línea 5
+  for (int i = 0 ; i < cantidad ; i++) {
+    char *figura = palo_to_char(cartas[i].palo);
+    char *numero = numero_to_char(cartas[i].numero);
+    printf(BLUE"|"RESET);
+    if (figura == "♥" || figura == "♦") {
+      printf(RED"  %s  "RESET, figura);
+    } else if (figura == "♠" || figura == "♣") {
+      printf(BLACK"  %s  "RESET, figura);
+    }
+    printf("%-2s", numero);
   }
   printf(BLUE"|\n"RESET);
 
   printf(BLUE"`-------^-------^-------^-------^-------^-------^-------^-------´\n"RESET);
-  for (int i = 1 ; i <= cantidad ; i++){
-      if (i == 1)printf("%5d", i);
+  for (int i = 1 ; i <= cantidad ; i++) {
+      if (i == 1) printf("%5d", i);
       else printf("%8d", i);
   }
   printf("\n\n");
