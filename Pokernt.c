@@ -662,16 +662,22 @@ bool comodinValido(char *cadena, int *ptrOpcion) {
 }
 
 void seleccionarComodin(Jugador *jugador) {
+  limpiarPantalla();
   char opcionAux[50];
   int opcion;
 
-  printf("\n=============== Listado de Comodines: ===============\n\n");
-  printf("\n1. Sir Jester, the Knight of Misrule\n");
-  printf("\n2. Joker B\n");
-  printf("\n3. Joker C\n");
-  printf("\n\nIngrese el número del comodín que desea ver:\n");
-  printf("Para salir ingrese 0\n");
-  printf("Para quitar comodin ingrese 'N'\n");
+  printf("\n     =============== Listado de Comodines ===============\n\n");
+  printf("     .--------------------------------------------------.");
+  printf("\n     │ 1. Sir Jester, the Knight of Misrule             │\n");
+  printf("     ----------------------------------------------------");
+  printf("\n     │ 2. Joker B                                       │\n");
+  printf("     ----------------------------------------------------");
+  printf("\n     │ 3. Joker C                                       │\n");
+  printf("     '--------------------------------------------------'");
+  printf("\n\n     Ingrese el número del comodín que desea ver\n");
+  printf("     Para salir ingrese 0\n");
+  printf("     Para quitar comodin ingrese 'N'\n");
+  printf("\n     Opción: ");
 
   scanf(" %[^\n]s", opcionAux);
   if (comodinValido(opcionAux, &opcion)) {
@@ -694,7 +700,10 @@ void seleccionarComodin(Jugador *jugador) {
       }
     }
   } else {
-    puts("Opción inválida. Intente nuevamente.");
+    puts("\nOpción inválida. Intente nuevamente.\n");
+    presioneTeclaParaContinuar();
+    seleccionarComodin(jugador);
+    return;
   }
 }
 
@@ -790,7 +799,6 @@ int main() {
         configuracion(&factor, &nivel, &estiloMazo);
         break;
       case '5':
-        limpiarPantalla();
         seleccionarComodin(&jugador);
         break;
       case '6':
