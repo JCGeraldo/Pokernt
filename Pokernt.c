@@ -6,9 +6,7 @@
 #include <time.h>
 #include "tdas/extra.h"
 #include "tdas/list.h"
-#include "tdas/heap.h"
 #include "tdas/stack.h"
-#include "tdas/queue.h"
 #include "tdas/hashmap.h"
 #include "cartas.c"
 
