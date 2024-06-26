@@ -420,7 +420,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
       puts("  1) Elegir cartas");
       puts("  2) Ordenar mano por palo");
       puts("  3) Ordenar mano por valor");
-      if (contadorDescartes < 3 + + sumaDescartes) {
+      if (contadorDescartes < 3 + sumaDescartes) {
           puts("  4) Descartar cartas");
       }
 
@@ -463,6 +463,8 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
           break;
         default:
           puts("Ingrese una opción válida: ");
+          limpiarBuffer();
+          limpiarPantalla();
           break;
       }
     } while(opcion != '1' && opcion != '2' && opcion != '3' && opcion != '4');
@@ -490,7 +492,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
 
     //Repetir hasta que se cumpla la condicion de victoria o de derrota
     limpiarPantalla();
-  } while(manosJugadas < 5+sumaComodin2);
+  } while(manosJugadas < 5 + sumaComodin2);
   stack_clean(mazoBarajado);
   free(mazoBarajado);
   return true;

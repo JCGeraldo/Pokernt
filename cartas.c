@@ -569,7 +569,7 @@
     printf(GREEN"(S/N): "RESET);
     scanf(" %[^\n]s", opcion);
     if (strcmp(opcion, "S") == 0 || strcmp(opcion, "s") == 0) {
-      printf("   ¡Has activado a Sir Jester!\n");
+      printf("\n   ¡Has activado a Sir Jester!\n");
       jugador->comodin = 1;
     } else if (strcmp(opcion, "N") == 0 || strcmp(opcion, "n") == 0) {
       printf("\n   ¡No has activado a Sir Jester!\n\n");
@@ -694,6 +694,7 @@
     puts("Mano:                                    Descartes: 0 / 3\n");
     if (mazo == 1) mostrar_cartas(jugador_tutorial.cartas, 8);
     else if (mazo == 2) mostrar_cartas_dos(jugador_tutorial.cartas, 8);
+    
     //puts(".-------.-------.-------.-------.-------.-------.-------.-------.");
     //puts("|7♠     |5♥     |6♦     |6♠     |Q♥     |9♦     |10♣  ♣ |8♦     |");
     //puts("|  ♠ ♠  |  ♥ ♥  |  ♦ ♦  |  ♠ ♠  |       | ♦ ♦ ♦ | ♣ ♣ ♣ | ♦ ♦ ♦ |");
