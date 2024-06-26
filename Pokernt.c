@@ -6,7 +6,9 @@
 #include <time.h>
 #include "tdas/extra.h"
 #include "tdas/list.h"
+#include "tdas/heap.h"
 #include "tdas/stack.h"
+#include "tdas/queue.h"
 #include "tdas/hashmap.h"
 #include "cartas.c"
 
@@ -154,7 +156,7 @@ bool esPareja(Carta* cartas, int largo);
 
 void mejorJugada(Carta* cartas, int largo, int* puntaje) {
   int multiplo = 1;
-  
+
   if (esEscaleraDeColor(cartas, largo)) {
     printf("Escalera de color!\n");
     *puntaje = 100;
@@ -192,7 +194,7 @@ void mejorJugada(Carta* cartas, int largo, int* puntaje) {
     *puntaje = 5;
     multiplo = 1;
   }
-  
+
   for (int i = 0 ; i < largo ; i++) {
     printf("%d ", cartas[i].puntaje);
     *puntaje += cartas[i].puntaje;
@@ -226,7 +228,7 @@ bool esPoker(Carta* cartas, int largo) {
 
 bool esFull(Carta* cartas, int largo) {
   if (largo < 5) return false;
-  
+
   int numerosDistintos = 1;
 
   for(int i = 0; i < largo - 1; i++)
@@ -247,7 +249,7 @@ bool esColor(Carta* cartas, int largo) {
 
 bool esEscalera(Carta* cartas, int largo) {
   if (largo < 5) return false;
-  
+
   // Ordenar las cartas
   qsort(cartas, largo, sizeof(Carta), compararNumerico);
 
@@ -313,7 +315,7 @@ bool esPareja(Carta* cartas, int largo) {
 
 // ----------------------------------------------------------------
 
-void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo, int estilo) {
+void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo) {
   if (largo == 0) return;
   // Crear un arreglo de cartas seleccionadas
   Carta* cartasSeleccionadas = (Carta*)malloc(largo * sizeof(Carta));
@@ -328,12 +330,11 @@ void asignacionPuntaje(Jugador* jugador, int* listaPosicion, int largo, int esti
     cartasSeleccionadas[i] = jugador->cartas[posicion-1];
   }
 
-  printf("Cartas seleccionadas:\n");
+  printf("Cartas seleccionadas en orden:\n");
   ordenarCartas(cartasSeleccionadas, largo);
-  estilo == 1? mostrar_cartas(cartasSeleccionadas, largo) : mostrar_cartas_dos(cartasSeleccionadas, largo);
-  /*for (int i = 0 ; i < largo ; i++) {
+  for (int i = 0 ; i < largo ; i++) {
     printf("|%d %d|  ", cartasSeleccionadas[i].numero, cartasSeleccionadas[i].palo);
-  }*/
+  }
   printf("\n");
 
   // Calcular el puntaje basado en las cartas seleccionadas
@@ -384,7 +385,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   // Inicializar variables y el mazo
   Carta mazo[52];
   int cartasElegidas[5] = {0,0,0,0,0};
-  
+
   //Limite de manos, condición de derrota.
   int manosJugadas = 0;
   int sumaComodin2 = 0;
@@ -392,10 +393,9 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
   int contadorDescartes = 0;
 
   inicializarMazo(mazo, mapa);
-  
+
    // Barajar el mazo
   Stack *mazoBarajado = stack_create(mazoBarajado);
-  stack_pop(mazoBarajado);
   barajarMazo(mazo, 52, mazoBarajado);
 
   // COMODÍN 1
@@ -407,7 +407,7 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
     sumaComodin2 += 2;
     sumaDescartes = -1;
   }
-  
+
   repartirMano(&jugador, mazoBarajado); // Repartir mano al jugador
   // Pedir cartas al jugador
   int carta;
@@ -419,15 +419,14 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
     do {
       mostrarComodin(jugador);
       printf("\n  Puntaje = %-30d Pozo = %d\n\n", jugador.puntaje, nivel.pozo);
-      printf("  Nivel %d" , nivel.etapa);
+      printf(MAGENTA_B"  Nivel %d"RESET , nivel.etapa);
       mostrarMano(jugador, manosJugadas, contadorDescartes, estiloMazo);
-      puts("==============================================================\n");
-      puts("Elija una opcion: ");
+      puts(BLUE" ==================================================================\n"RESET);
+      puts("  Elija una opcion: ");
       puts("  1) Elegir cartas");
       puts("  2) Ordenar mano por palo");
       puts("  3) Ordenar mano por valor");
-
-      if (contadorDescartes < 3 + sumaDescartes) {
+      if (contadorDescartes < 3 + + sumaDescartes) {
           puts("  4) Descartar cartas");
       }
 
@@ -476,9 +475,15 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
 
     if (opcion != '1') continue;
     manosJugadas++;
-    
+    //Mostrar cartas elegidas y pedir confirmacion(opcional)
+    printf("Cartas elegidas: \n");
+    for(int i = 0; i < cont; i++){
+      if(jugador.cartas[cartasElegidas[i] - 1].numero == 0) break;
+      printf("|%d %d|  ", jugador.cartas[cartasElegidas[i] - 1].numero, jugador.cartas[cartasElegidas[i] - 1].palo);
+    }
+    printf("\n");
 
-    asignacionPuntaje(&jugador, cartasElegidas, cont, estiloMazo);
+    asignacionPuntaje(&jugador, cartasElegidas, cont);
     presioneTeclaParaContinuar();
 
     if(jugador.puntaje >= nivel.pozo){//Condición de victoria
@@ -486,8 +491,6 @@ bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
       free(mazoBarajado);
       return false;
     }
-    if(manosJugadas == 5+sumaComodin2)
-      break;
     //se reemplazan las cartas usadas por otras del mazo y se vacia la lista de cartas elegidas.
     for(int i = 0 ; i < cont ; i++) {
       jugador.cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
@@ -561,7 +564,7 @@ void mostrar_tutorial(Jugador jugador_tutorial , int *mazo) {
 
   if (*mazo == 1) mostrar_cartas(jugador_tutorial.cartas, 8);
   else if (*mazo == 2) mostrar_cartas_dos(jugador_tutorial.cartas, 8);
-      
+
   puts("3. Puedes elegir hasta 5 cartas para jugar.");
   puts("4. Cada jugada suma puntos basados en las cartas elegidas y la combinación que forman.");
   puts("5. Puedes descartar cartas para obtener nuevas cartas.");
@@ -656,7 +659,7 @@ void cargarEstiloMazo(int *estilo){
   FILE* archivo;
   int etapa,pozo, comodin;
   float factor;
-  
+
   archivo = fopen("SaveFile.txt", "r");
   if (archivo == NULL)
     return;
@@ -716,14 +719,22 @@ void seleccionarComodin(Jugador *jugador) {
   char opcionAux[50];
   int opcion;
 
-  printf("\n     =============== Listado de Comodines ===============\n\n");
-  printf("     .--------------------------------------------------.");
-  printf("\n     │ 1. Sir Jester, the Knight of Misrule             │\n");
+  printf(BLUE"\n     =============== "RESET);
+  printf("Listado de Comodines ");
+  printf(BLUE"===============\n\n"RESET);
+  printf(GREEN"     .--------------------------------------------------.");
+  printf(GREEN"\n     │ "RESET);
+  printf("1. Sir Jester, the Knight of Misrule             ");
+  printf(GREEN"│\n");
   printf("     ----------------------------------------------------");
-  printf("\n     │ 2. Amenhotep, the king of the desert             │\n");
+  printf("\n     │ "RESET);
+  printf("2. Amenhotep, the king of the desert             ");
+  printf(GREEN"│\n");
   printf("     ----------------------------------------------------");
-  printf("\n     │ 3. Joker C                                       │\n");
-  printf("     '--------------------------------------------------'");
+  printf(GREEN"\n     │ "RESET);
+  printf("3. Joker C                                       ");
+  printf(GREEN"│\n");
+  printf("     '--------------------------------------------------'"RESET);
   printf("\n\n     Ingrese el número del comodín que desea ver\n");
   printf("     Para salir ingrese 0\n");
   printf("     Para quitar comodin ingrese 'N'\n");
@@ -774,7 +785,7 @@ int main() {
 
   int estiloMazo = 1;
   cargarEstiloMazo(&estiloMazo);
-  
+
   mostrarTitulo();
   mostrarChancho();
   puts("\nPresione una tecla para jugar...");
@@ -790,7 +801,7 @@ int main() {
   char opcion, opcion2, opcion3;
   bool derrota = false;
   do {
-     
+
       puts("1) Jugar");
       puts("2) Cargar Partida");
       puts("3) Tutorial");
