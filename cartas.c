@@ -423,7 +423,7 @@
 
     printf("  `");
     for(int i = 0; i < cantidad; i++){
-      i == cantidad - 1?printf("-------´\n"):printf("-------^");
+      i == cantidad - 1?printf("-------´\n  "):printf("-------^");
     }
   }
 
@@ -522,7 +522,7 @@
 
     printf(BLUE"  `");
     for(int i  = 0; i < cantidad; i++){
-      i == cantidad - 1?printf("-------´\n"RESET):printf("-------^");
+      i == cantidad - 1?printf("-------´\n  "RESET):printf("-------^");
     }
     for (int i = 1 ; i <= cantidad ; i++) {
         if (i == 1) printf("%5d", i);
