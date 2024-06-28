@@ -350,19 +350,25 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
   int cont = 0;
   int cartasElegidas[5] = {0, 0, 0, 0, 0};
 
-  do {
-    printf("Ingrese el número de la carta que desea descartar (1-8): ");
-    if (!scanf("%d", &carta) || carta < 1 || carta > 8) {
-      puts("Ingrese un número válido !! ");
-      limpiarBuffer();
-    } else if (noExiste(carta, cartasElegidas)) {
+  printf("Ingrese el número de la carta que desea descartar (1-8): ");
+  do{
+    do{
+      if(!scanf("%d", &carta) || carta < 0 || carta > 8 ){
+        puts("Ingrese un número válido: ");
+        limpiarBuffer();
+      }
+    }while(carta < 0 || carta > 8);
+    if(!carta && cont == 0){
+      puts("Elija al menos una carta");
+      continue;
+    }
+    if(!carta) break;
+    if(noExiste(carta,cartasElegidas)) {
       cartasElegidas[cont] = carta;
       cont++;
-    } else {
-      printf("\nLa carta ya fue elegida, ingrese otra!!\n ");
-      limpiarBuffer();
     }
-  } while (cont < 5 && carta != 0);
+    else printf("La carta ya fue elegida, ingrese otra: ");
+  } while(cont < 5);
 
   for (int i = 0; i < cont; i++) {
     jugador->cartas[cartasElegidas[i] - 1] = *(Carta*)stack_pop(mazoBarajado);
@@ -371,6 +377,7 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
   (*contadorDescartes)++;
   limpiarPantalla();
 }
+
 
 // ==================== OPCIÓN 1 ====================
 
