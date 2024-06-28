@@ -367,7 +367,7 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
       cartasElegidas[cont] = carta;
       cont++;
     }
-    else printf("La carta ya fue elegida, ingrese otra: ");
+    else puts("La carta ya fue elegida, ingrese otra: ");
   } while(cont < 5);
 
   for (int i = 0; i < cont; i++) {
