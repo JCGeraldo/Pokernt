@@ -33,10 +33,6 @@
   #define BOLD "\033[1m"
   #define UNDERLINE "\033[4m"
 
-
-
-
-
   typedef struct {
     char numero; // 1 a 13
     int palo;  // 0-3 (0 es Corazones, 1 es Diamantes, 2 es Tréboles, 3 es Picas)
@@ -92,7 +88,7 @@
         break;
       case 3:
         printf(BLUE"  │"RESET);
-        printf("                             Joker C                             ");
+        printf("                            Proximamente...                            ");
         printf(BLUE"│\n"RESET);
         break;
       default:
@@ -531,6 +527,34 @@
     printf("\n\n");
   }
 
+void mostrarMenu() {
+  printf("     .-------------------------.");
+  printf("\n     │ ");
+  printf("1) Jugar                ");
+  printf("│\n");
+  printf("     ---------------------------");
+  printf("\n     │ ");
+  printf("2) Cargar Partida       ");
+  printf("│\n");
+  printf("     ---------------------------");
+  printf("\n     │ ");
+  printf("3) Tutorial             ");
+  printf("│\n");
+  printf("     ---------------------------");
+  printf("\n     │ ");
+  printf("4) Configuración        ");
+  printf("│\n");
+  printf("     ---------------------------");
+  printf("\n     │ ");
+  printf("5) Comodín              ");
+  printf("│\n");
+  printf("     ---------------------------");
+  printf("\n     │ ");
+  printf("6) Salir                ");
+  printf("│\n");
+  printf("     '-------------------------'\n\n");
+}
+
   // ============================================================
   // ========================== JOKERS ==========================
   // ============================================================
@@ -629,54 +653,52 @@
 
   }
 
-
-
   // ============================================================
   // ============================================================
   // ============================================================
 
   void mostrarTitulo(){
-    puts(BLUE"\n========================================");
-    printf(BLACK"           ♠♣");
+    puts(BLUE"\n     ========================================");
+    printf(BLACK"                ♠♣");
     printf(RED"♦♥ "RESET); 
     printf("Pokern't ");
     printf(RED"♥♦");
     printf(BLACK"♣♠ \n");
-    puts(BLUE"======================================== \n"RESET);
+    puts(BLUE"     ======================================== \n"RESET);
   }
 
   void mostrarChancho(){
-    printf(RED_B"              ▄█▄▄▄▄▄▄▄   ▄  \n");
-    printf("             █▀██▀▄▄▀███▄▐ ▌ \n");
-    printf("            ████▌█▌▐█▐███▄▀▄ \n");
-    printf("             ████▄▀▀▄████    \n");
-    printf("              ▀█▀▀▀▀▀▀█▀     \n");
-    printf(CYAN_B"          ▀█████████████████▀\n");
-    printf("           █               █ \n");
-    printf("           █               █ \n");
-    printf("           █               █ \n"RESET);
+    printf(RED_B"                   ▄█▄▄▄▄▄▄▄   ▄  \n");
+    printf("                  █▀██▀▄▄▀███▄▐ ▌ \n");
+    printf("                 ████▌█▌▐█▐███▄▀▄ \n");
+    printf("                  ████▄▀▀▄████    \n");
+    printf("                   ▀█▀▀▀▀▀▀█▀     \n");
+    printf(CYAN_B"               ▀█████████████████▀\n");
+    printf("                █               █ \n");
+    printf("                █               █ \n");
+    printf("                █               █ \n"RESET);
   }
 
   void mensajeVictoria(){
-    puts(BLUE"========================================");
-    printf(BLACK"           ♠♣");
+    puts(BLUE"     ========================================");
+    printf(BLACK"                ♠♣");
     printf(RED"♦♥ "RESET);
     printf("VICTORIA ");
     printf(RED"♥♦");
     printf(BLACK"♣♠ \n");
-    puts(BLUE"========================================"RESET);
+    puts(BLUE"     ========================================"RESET);
     mostrarChancho();
-    puts("\nDesea continuar al siguiente nivel? (s/n)");
+    puts("\n     Desea continuar al siguiente nivel? (s/n)");
   }
 
   void mensajeFinal(){
-    puts(BLUE"==========================================================");
-    printf(BLACK"                   ♠♣");
+    puts(BLUE"     ==========================================================");
+    printf(BLACK"                        ♠♣");
     printf(RED"♦♥ "RESET);
     printf("FIN DEL JUEGO");
     printf(RED"♥♦");
     printf(BLACK"♣♠ \n");
-    puts(BLUE"=========================================================="RESET);
+    puts(BLUE"     =========================================================="RESET);
   }
 
   void mensajeEstrategias(Jugador jugador_tutorial , int mazo){
@@ -704,7 +726,7 @@
     //puts("`-------^-------^-------^-------^-------^-------^-------^-------´");
     //puts("    1       2       3       4       5       6       7       8");
 
-    printf(BLUE"================================================================\n"RESET);
+    printf(BLUE"================================================================\n\n"RESET);
 
     puts(" Elija una opcion: ");
     puts("  1) Elegir cartas");

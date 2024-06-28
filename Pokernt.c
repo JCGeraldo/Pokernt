@@ -11,8 +11,6 @@
 #include "cartas.c"
 
 // Estructura Save File: nivel, pozo, dificultad, comodin, estilo
-
-
 typedef struct {
   int etapa; // Nivel de juego
   int pozo; // Pozo del nivel
@@ -41,6 +39,7 @@ void inicializarMapa(HashMap *mapa){
     insertMap(mapa, numero, puntaje);
   }
 }
+
 // ----------------------------------------------------------------
 
 void inicializarMazo(Carta *mazo, HashMap *mapa) {
@@ -70,6 +69,7 @@ void barajarMazo(Carta *mazo, int tamano, Stack *mazoBarajado) {
 }
 
 // ----------------------------------------------------------------
+
 bool noExiste(int carta,int *cartasElegidas){
   for(int i =0; i <5; i++){
     if(cartasElegidas[i] == carta) return false;
@@ -378,7 +378,6 @@ void descartarCartas(Jugador *jugador, Stack *mazoBarajado, int *contadorDescart
   limpiarPantalla();
 }
 
-
 // ==================== OPCIÓN 1 ====================
 
 bool jugar(Jugador jugador, Nivel nivel, HashMap *mapa, int estiloMazo) {
@@ -527,6 +526,7 @@ void reiniciarGuardado(Nivel *nivel, float factor, int estiloMazo) {
   fprintf(archivo, "%d, %d, %f, %d, %d", 1, 100, factor, 0, estiloMazo);   
   fclose(archivo);
 }
+
 // ==================== OPCIÓN 2 ====================
 
 void cargarPartida(Nivel *nivel, Jugador* jugador,float* factor, int* estilo ){
@@ -545,6 +545,8 @@ void cargarPartida(Nivel *nivel, Jugador* jugador,float* factor, int* estilo ){
   puts("Partida cargada exitosamente.");
   puts("Seleccione la opción 1 para continuar su partida.");
 }
+
+// ==================== OPCIÓN 3 ====================
 
 void mostrar_tutorial(Jugador jugador_tutorial , int *mazo) {
   limpiarPantalla();
@@ -571,7 +573,7 @@ void mostrar_tutorial(Jugador jugador_tutorial , int *mazo) {
   mensajeEstrategias(jugador_tutorial , *mazo);
 }
 
-// ==================== OPCIÓN 3 ====================
+// ==================== OPCIÓN 4 ====================
 
 void seleccionarDificultad(float *factor, Nivel* nivel) {
   limpiarPantalla();
@@ -652,6 +654,7 @@ void seleccionarMazo(int *mazo) {
     puts("Opción inválida. Intente nuevamente.");
   }
 }
+
 void cargarEstiloMazo(int *estilo){
   FILE* archivo;
   int etapa,pozo, comodin;
@@ -664,6 +667,7 @@ void cargarEstiloMazo(int *estilo){
   fclose(archivo);
   return;
 }
+
 bool configuracionValida(char *cadena, int *ptrOpcion) {
   for (int i = 0 ; cadena[i] != '\0' ; i++) {
     if (!isdigit(cadena[i])) return false;
@@ -729,7 +733,7 @@ void seleccionarComodin(Jugador *jugador) {
   printf(GREEN"│\n");
   printf("     ----------------------------------------------------");
   printf(GREEN"\n     │ "RESET);
-  printf("3. Joker C                                       ");
+  printf("3. Proximamente...                               ");
   printf(GREEN"│\n");
   printf("     '--------------------------------------------------'"RESET);
   printf("\n\n     Ingrese el número del comodín que desea ver\n");
@@ -785,7 +789,7 @@ int main() {
 
   mostrarTitulo();
   mostrarChancho();
-  puts("\nPresione una tecla para jugar...");
+  puts("\n     Presione una tecla para jugar...");
   getchar();
   limpiarPantalla();
 
@@ -798,16 +802,10 @@ int main() {
   char opcion, opcion2, opcion3;
   bool derrota = false;
   do {
-
-      puts("1) Jugar");
-      puts("2) Cargar Partida");
-      puts("3) Tutorial");
-      puts("4) Configuración");
-      puts("5) Comodín");
-      puts("6) Salir");
-      printf("Ingrese su opción: ");
-      scanf(" %c", &opcion);
-      switch (opcion) {
+    mostrarMenu();
+    printf("Ingrese su opción: ");
+    scanf(" %c", &opcion);
+    switch (opcion) {
       case '1':
         do{
           derrota = jugar(jugador, nivel, mapa, estiloMazo);
