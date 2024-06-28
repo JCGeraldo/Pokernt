@@ -68,7 +68,9 @@ En el momento de que se selecccione, el jugador comenzará en el nivel 1, se le 
 
 **Paso 2: Seleccion cartas**
 
-Luego de observar las cartas, el jugador puede elegir tanto jugar una combinación, ordenar mano por palo, ordenar mano por valor o finalmente, descartar cartas. En este caso el jugador puede jugar un doble pareja!!
+Luego de observar las cartas, el jugador puede elegir tanto jugar una combinación, ordenar mano por palo, ordenar mano por valor o finalmente, descartar cartas.
+El jugador puede elegir hasta 5 cartas para jugar, o puede ingresar un cero para terminar la selección con menos cartas.
+En este caso el jugador puede jugar un doble pareja!!
 ````
 Opción seleccionada: 1) Elegir cartas
 
