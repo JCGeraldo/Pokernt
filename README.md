@@ -25,11 +25,11 @@ Para mayor simplicidad al momento de probar y ejecutar el juego se utilizará la
 * `Salir`: La opción "Salir" permite al jugador finalizar la aplicación.
 
 ## Problemas conocidos:
-* A rellenar
+* El programa no es capaz de soportar ingresos inválidos en las opciones que superen los 50 caracteres.
 
 ## A mejorar:
 * Darle la posibilidad al jugador de cancelar una opcion luego de ser elegida durante la partida.
-* Mejorar la interacción exclusiva a través del teclado
+* Mejorar la interacción exclusiva a través del teclado.
 
 ## Ejemplo de uso:
 **Paso 1: Jugar**
@@ -48,11 +48,11 @@ Opción seleccionada: 1) Jugar
   Mano:                                    Descartes: 0 / 3
 
   .-------.-------.-------.-------.-------.-------.-------.-------.
-  |Q   ♥  |3   ♥  |Q   ♦  |3   ♦  |J   ♣  |9   ♠  |5   ♣  |J   ♥   |
-  |   ♥♥  |   ♥♥  |   ♦♦  |   ♦♦  |   ♣♣  |   ♠♠  |   ♣♣  |   ♥♥    |
-  |  ♥♥♥  |  ♥♥♥  |  ♦♦♦  |  ♦♦♦   |  ♣♣♣  |  ♠♠♠  |  ♣♣♣  |  ♥♥♥    |
-  |  ♥♥   |  ♥♥   |  ♦♦   |  ♦♦   |  ♣♣   |  ♠♠   |  ♣♣   |  ♥♥     |
-  |  ♥  Q |  ♥  3 |  ♦  Q |  ♦  3 |  ♣  J |  ♠  9 |  ♣  5 |  ♥  J  |
+  |Q   ♥  |3   ♥  |Q   ♦  |3   ♦  |J   ♣  |9   ♠  |5   ♣  |J   ♥  |
+  |   ♥♥  |   ♥♥  |   ♦♦  |   ♦♦  |   ♣♣  |   ♠♠  |   ♣♣  |   ♥♥  |
+  |  ♥♥♥  |  ♥♥♥  |  ♦♦♦  |  ♦♦♦  |  ♣♣♣  |  ♠♠♠  |  ♣♣♣  |  ♥♥♥  |
+  |  ♥♥   |  ♥♥   |  ♦♦   |  ♦♦   |  ♣♣   |  ♠♠   |  ♣♣   |  ♥♥   |
+  |  ♥  Q |  ♥  3 |  ♦  Q |  ♦  3 |  ♣  J |  ♠  9 |  ♣  5 |  ♥  J |
   `-------^-------^-------^-------^-------^-------^-------^-------
       1       2       3       4       5       6       7       8
 
